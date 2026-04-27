@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
+<!-- saved from url=(0041)file:///C:/Users/gvg/Downloads/index.html -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calculadora del Baremo USAL</title>
   <style>
@@ -21,8 +21,6 @@
       --color-border: #e0e0e0;
       --color-info: #2196F3;
       --color-info-bg: #e3f2fd;
-      --color-success: #4CAF50;
-      --color-warning: #FF9800;
     }
     
     @media (prefers-color-scheme: dark) {
@@ -89,91 +87,6 @@
       background: var(--color-bg-primary);
       color: var(--color-text-primary);
       cursor: pointer;
-    }
-
-    .upload-section {
-      background: var(--color-bg-secondary);
-      border: 2px dashed var(--color-border);
-      border-radius: 8px;
-      padding: 16px;
-      margin-bottom: 1.5rem;
-      text-align: center;
-    }
-
-    .upload-section h3 {
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    .upload-section p {
-      font-size: 12px;
-      color: var(--color-text-secondary);
-      margin-bottom: 12px;
-    }
-
-    #pdfInput {
-      display: none;
-    }
-
-    .upload-btn {
-      font-size: 13px;
-      padding: 10px 20px;
-      border-radius: 6px;
-      border: 1px solid var(--color-info);
-      background: var(--color-info);
-      color: white;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .upload-btn:hover {
-      opacity: 0.9;
-    }
-
-    .progress-container {
-      display: none;
-      margin-top: 12px;
-    }
-
-    .progress-bar {
-      width: 100%;
-      height: 6px;
-      background: var(--color-border);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: var(--color-info);
-      width: 0%;
-      transition: width 0.3s;
-    }
-
-    .status-message {
-      font-size: 12px;
-      margin-top: 8px;
-      padding: 8px;
-      border-radius: 6px;
-      display: none;
-    }
-
-    .status-message.success {
-      background: rgba(76, 175, 80, 0.1);
-      color: var(--color-success);
-      display: block;
-    }
-
-    .status-message.error {
-      background: rgba(244, 67, 54, 0.1);
-      color: #f44336;
-      display: block;
-    }
-
-    .status-message.info {
-      background: var(--color-info-bg);
-      color: var(--color-info);
-      display: block;
     }
     
     .summary {
@@ -334,6 +247,7 @@
       font-weight: bold;
       cursor: help;
       position: relative;
+      flex-shrink: 0;
     }
 
     .help-icon:hover::after {
@@ -421,7 +335,7 @@
     <select id="figura" onchange="updateAll()">
       <option value="ASO">Asociado (ASO)</option>
       <option value="PAD">Profesor Ayudante Doctor (PAD)</option>
-      <option value="PPL" selected>PPL / Titular de Universidad (TU)</option>
+      <option value="PPL" selected="">PPL / Titular de Universidad (TU)</option>
       <option value="VIN">PPL/TU Vinculado</option>
       <option value="CU">Catedrático de Universidad (CU)</option>
       <option value="CU_VIN">CU Vinculado</option>
@@ -430,21 +344,329 @@
     <button class="reset-btn" onclick="resetAll()">Reiniciar</button>
   </div>
 
-  <div class="upload-section">
-    <h3>📄 Analizar CV automáticamente</h3>
-    <p>Sube tu CV en PDF y Claude lo analizará para rellenar automáticamente los campos</p>
-    <button class="upload-btn" id="uploadBtn" onclick="document.getElementById('pdfInput').click()">Seleccionar PDF</button>
-    <input type="file" id="pdfInput" accept=".pdf" onchange="handlePdfUpload(event)">
-    <div class="progress-container" id="progressContainer">
-      <div class="progress-bar">
-        <div class="progress-fill" id="progressFill"></div>
+  <div class="summary" id="summary"><div class="scard"><div class="slabel">Formación</div><div class="sval">0.00</div><div class="smax">máx 6.00</div></div><div class="scard"><div class="slabel">Docencia</div><div class="sval">0.00</div><div class="smax">máx 13.00</div></div><div class="scard"><div class="slabel">Investigación</div><div class="sval">0.00</div><div class="smax">máx 13.00</div></div><div class="scard"><div class="slabel">Liderazgo</div><div class="sval">0.00</div><div class="smax">máx 4.00</div></div><div class="scard"><div class="slabel">Act. Prof.</div><div class="sval">0.00</div><div class="smax">máx 2.00</div></div><div class="scard"><div class="slabel">Méritos</div><div class="sval">0.00</div><div class="smax">máx 8.00</div></div><div class="scard total"><div class="slabel">Total</div><div class="sval">0.00</div></div></div>
+  <div class="sections" id="sections"><div class="section">
+      <div class="sec-header" onclick="toggleSec(0)">
+        <span class="sec-title">I. Formación académica e investigadora</span>
+        <span class="sec-badge" id="sec0">0.00 pts</span>
       </div>
-      <div class="status-message" id="statusMessage"></div>
+      <div class="sec-body" id="secbody-0"><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Nota media expediente de grado</span>
+        <div class="explanation">Se multiplica la nota (1-4) por un factor que varía según la figura. Máximo: 2.00 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Escala 1-4">?</div>
     </div>
-  </div>
-
-  <div class="summary" id="summary"></div>
-  <div class="sections" id="sections"></div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;1.1_grado&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="1.1_grado">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Puntuación expediente de máster</span>
+        <div class="explanation">Máximo: 0.50 pts. Si tienes 2 másteres o máster + tesina, se suma con ponderación.</div>
+      </div>
+      <div class="help-icon" data-help="Máx con 2 másteres">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;1.1_master&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="1.1_master">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Calificación especial de tesis doctoral</span>
+        <div class="explanation">Solo si tu tesis tiene mención de doctorado europeo o "apto cum laude". Máximo: 0.10 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Solo máxima o mención internacional">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;1.1_tesis&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="1.1_tesis">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Títulos adicionales</span>
+        <div class="explanation">0,1 pts por cada título adicional completado (máximo 5 títulos). Máximo: 0.20 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Grados, másteres, doctorados complementarios">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;1.1_adics&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="1.1_adics">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Certificaciones de idiomas</span>
+        <div class="explanation">0,1 pts por cada idioma certificado C1+. Máximo: 0.20 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Nivel C1 o superior, distintos a lengua materna">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;1.1_idiomas&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="1.1_idiomas">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Contratos predoctorales</span>
+        <div class="explanation">Cálculo: (meses / 48) × máximo. Máximo: 1.00 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Introduce total de meses">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="1" value="0" onchange="data[&#39;1.2_predoc_meses&#39;]=parseFloat(this.value)||0; updateAll();" placeholder="Meses">
+             <span class="field-points" data-calc-id="1.2_predoc">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Contratos postdoctorales</span>
+        <div class="explanation">Cálculo: (meses / 24) × ratio × máximo. Beatriz Galindo/Ramón y Cajal = ×1.0, Juan de la Cierva = ×0.667, Otros = ×0.333. Máximo: 1.50 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Ramón y Cajal &gt; Juan de la Cierva &gt; otros">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="1" value="0" onchange="data[&#39;1.2_postdoc_meses&#39;]=parseFloat(this.value)||0; updateAll();" placeholder="Meses">
+             <select onchange="data[&#39;1.2_postdoc_tipo&#39;]=this.value; updateAll();">
+               <option value="galindo">Beatriz Galindo (×1.0)</option>
+               <option value="cierva" selected="">Juan de la Cierva (×0.667)</option>
+               <option value="otros">Otros (×0.333)</option>
+             </select>
+             <span class="field-points" data-calc-id="1.2_postdoc">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Otros contratos de investigación</span>
+        <div class="explanation">Puntuación directa. Máximo: 0.50 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Contratos o becas de proyectos">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;1.2_otros&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="1.2_otros">0.00 pts</span></div></div></div></div><div class="section">
+      <div class="sec-header" onclick="toggleSec(1)">
+        <span class="sec-title">II. Docencia</span>
+        <span class="sec-badge" id="sec1">0.00 pts</span>
+      </div>
+      <div class="sec-body" id="secbody-1"><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Años docencia en titulaciones oficiales</span>
+        <div class="explanation">Cálculo: años × 1. Máximo: 7.00 pts.</div>
+      </div>
+      <div class="help-icon" data-help="1 pt/año (o 0,5 si eres CU)">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;2.1_doc&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="2.1_doc">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Horas formación docente impartida</span>
+        <div class="explanation">Cálculo: (horas / 10) × 0,1. Máximo: 0.50 pts.</div>
+      </div>
+      <div class="help-icon" data-help="0,1 pts cada 10 horas">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;2.2_cursimp&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="2.2_cursimp">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Recursos educativos abiertos (REA)</span>
+        <div class="explanation">Máximo: 0.20 pts. Se valoran recursos como moocs, materiales abiertos, etc.</div>
+      </div>
+      <div class="help-icon" data-help="Hasta 0,1 pts por recurso">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;2.2_rea&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="2.2_rea">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Horas docencia no oficial</span>
+        <div class="explanation">Cálculo: (horas / 100) × 0,1. Máximo: 0.30 pts. Formación continua, cursos de extension, etc.</div>
+      </div>
+      <div class="help-icon" data-help="0,1 pts cada 100 horas">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;2.2_noofic&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="2.2_noofic">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Evaluaciones de calidad docente (Docentia)</span>
+        <div class="explanation">Según el resultado de la evaluación. Máximo: 2.00 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Excelente=1, Muy Favorable=0,5, Favorable=0,1">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;2.3_calidad&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="2.3_calidad">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Proyectos innovación docente</span>
+        <div class="explanation">0,1 por proyecto aprobado. Máximo: 2.00 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Proyectos, formación, publicaciones">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;2.4_innov&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="2.4_innov">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Tutorización de TFG/TFM/PIF</span>
+        <div class="explanation">Cálculo: (trabajos / 10) × 0,1. Máximo: 1.00 pts.</div>
+      </div>
+      <div class="help-icon" data-help="0,1 cada 10 trabajos">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;2.5_tutor&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="2.5_tutor">0.00 pts</span></div></div></div></div><div class="section">
+      <div class="sec-header" onclick="toggleSec(2)">
+        <span class="sec-title">III. Investigación</span>
+        <span class="sec-badge" id="sec2">0.00 pts</span>
+      </div>
+      <div class="sec-body" id="secbody-2"><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Proyectos competitivos</span>
+        <div class="explanation">Europeo: 0,5 pts/3 años. Nacional: 0,3 pts. Regional: 0,2 pts. Máximo: 2.00 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Europeo/Nacional/Regional">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;3.1_proyectos&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="3.1_proyectos">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Publicaciones científicas</span>
+        <div class="explanation">Tasas: A=0.2, B=0.1, C=0.05, D=0.025. Máximo C+D: 1/3 del total. Máximo: 7.00 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Por categoría A, B, C, D">?</div>
+    </div>
+    <div class="field-input-wrapper"></div></div>
+             <div class="subsec-title">Publicaciones por categoría</div>
+             <div class="grid2">
+               <label>Cat A:</label><input type="number" min="0" step="1" value="0" onchange="data[&#39;3.2_catA&#39;]=parseInt(this.value)||0; updateAll();">
+               <label>Cat B:</label><input type="number" min="0" step="1" value="0" onchange="data[&#39;3.2_catB&#39;]=parseInt(this.value)||0; updateAll();">
+               <label>Cat C:</label><input type="number" min="0" step="1" value="0" onchange="data[&#39;3.2_catC&#39;]=parseInt(this.value)||0; updateAll();">
+               <label>Cat D:</label><input type="number" min="0" step="1" value="0" onchange="data[&#39;3.2_catD&#39;]=parseInt(this.value)||0; updateAll();">
+             </div>
+             <div style="text-align: right; margin-top: 8px;">
+               <span class="field-points" data-calc-id="3.2_publics">0.00 pts</span>
+             </div>
+             <div class="field-input-wrapper" style="display: none;"></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Congresos y comunicaciones</span>
+        <div class="explanation">Internacionales: Invit=0,2, Oral=0,1, Póster=0,05. Nacionales: Invit=0,1, Oral=0,05, Póster=0,02. Máximo: 1.50 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Invitaciones, orales, pósters">?</div>
+    </div>
+    <div class="field-input-wrapper"></div></div>
+             <div class="subsec-title">Congresos internacionales</div>
+             <div class="grid2">
+               <label>Invit:</label><input type="number" min="0" step="1" value="0" onchange="data[&#39;3.3_intlInv&#39;]=parseInt(this.value)||0; updateAll();">
+               <label>Oral:</label><input type="number" min="0" step="1" value="0" onchange="data[&#39;3.3_intlOral&#39;]=parseInt(this.value)||0; updateAll();">
+               <label>Póster:</label><input type="number" min="0" step="1" value="0" onchange="data[&#39;3.3_intlPost&#39;]=parseInt(this.value)||0; updateAll();">
+             </div>
+             <div class="subsec-title">Congresos nacionales</div>
+             <div class="grid2">
+               <label>Invit:</label><input type="number" min="0" step="1" value="0" onchange="data[&#39;3.3_natInv&#39;]=parseInt(this.value)||0; updateAll();">
+               <label>Oral:</label><input type="number" min="0" step="1" value="0" onchange="data[&#39;3.3_natOral&#39;]=parseInt(this.value)||0; updateAll();">
+               <label>Póster:</label><input type="number" min="0" step="1" value="0" onchange="data[&#39;3.3_natPost&#39;]=parseInt(this.value)||0; updateAll();">
+             </div>
+             <div style="text-align: right; margin-top: 8px;">
+               <span class="field-points" data-calc-id="3.3_congresos">0.00 pts</span>
+             </div>
+             <div class="field-input-wrapper" style="display: none;"></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Sexenios de investigación</span>
+        <div class="explanation">Cada sexenio = 0.5 pts. Máximo: 1.00 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Introduce número total">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;3.4_sexenios&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="3.4_sexenios">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Estancias de investigación</span>
+        <div class="explanation">Cálculo: meses × 0.1. Máximo: 1.50 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Meses en instituciones extranjeras">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;3.5_estancias&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="3.5_estancias">0.00 pts</span></div></div><div class="section">
+      <div class="sec-header" onclick="toggleSec(3)">
+        <span class="sec-title">IV. Liderazgo</span>
+        <span class="sec-badge" id="sec3">0.00 pts</span>
+      </div>
+      <div class="sec-body" id="secbody-3"><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Dirección de proyectos competitivos</span>
+        <div class="explanation">IP Europeo: 0,3 pts/3 años. IP Nacional: 0,2 pts. IP Regional: 0,15 pts. Máximo: 1.00 pts. (Introduce valor calculado)</div>
+      </div>
+      <div class="help-icon" data-help="IP Europeo, Nacional o Regional">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;4.1_direccion&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="4.1_direccion">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Tesis doctorales dirigidas</span>
+        <div class="explanation">Cálculo: tesis × 0,1 (ASO: ×0,1, PAD: ×0,1, PPL: ×0,1, etc). Máximo: 0.50 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Número total de tesis">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;4.2_tesis&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="4.2_tesis">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Cargos de dirección y gestión</span>
+        <div class="explanation">Rector/Vicerrector/Decano: 0,2 pts/año. Vicedecano/Director: 0,1 pts/año. Máximo: 1.00 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Rector/Decano/Vicedecano/etc">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;4.3_gestion&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="4.3_gestion">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Órganos científicos y comités</span>
+        <div class="explanation">Hasta 0,1 pts/año de participación. Máximo: 1.00 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Consejos, comisiones, etc">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;4.4_organos&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="4.4_organos">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Premios y reconocimientos</span>
+        <div class="explanation">Según el nivel del premio. Máximo: 0.50 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Grado=0,2, Máster=0,1, Doctor=0,2">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;4.5_premios&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="4.5_premios">0.00 pts</span></div></div></div></div><div class="section">
+      <div class="sec-header" onclick="toggleSec(4)">
+        <span class="sec-title">V. Actividad profesional</span>
+        <span class="sec-badge" id="sec4">0.00 pts</span>
+      </div>
+      <div class="sec-body" id="secbody-4"><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Años experiencia profesional</span>
+        <div class="explanation">Cálculo: años × 1. Máximo: 2.00 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Máx 1 pt/año">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;5.1_expprof&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="5.1_expprof">0.00 pts</span></div></div></div></div><div class="section">
+      <div class="sec-header" onclick="toggleSec(5)">
+        <span class="sec-title">VI. Méritos preferentes</span>
+        <span class="sec-badge" id="sec5">0.00 pts</span>
+      </div>
+      <div class="sec-body" id="secbody-5"><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Años como PDI en universidad pública</span>
+        <div class="explanation">Cálculo: años × 1 (completo) o × 0,5 (parcial). Máximo: 2.00 pts.</div>
+      </div>
+      <div class="help-icon" data-help="Tiempo completo=1pt, parcial=0,5pt">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;6.1_pdi&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="6.1_pdi">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">¿Grado de doctor?</span>
+        <div class="explanation">Tu figura requiere doctorado: 0 pts adicionales.</div>
+      </div>
+      <div class="help-icon" data-help="1 si tienes, 0 si no">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;6.2_doctor&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="6.2_doctor">0.00 pts</span></div></div><div class="field-group">
+    <div class="field-header">
+      <div class="field-label">
+        <span class="field-label-text">Acreditación PAD o superior</span>
+        <div class="explanation">Si tienes acreditación PAD (o superior): 6 pts. Sin acreditación: 0 pts.</div>
+      </div>
+      <div class="help-icon" data-help="1 si tienes, 0 si no. Válido hasta 12/04/2027">?</div>
+    </div>
+    <div class="field-input-wrapper"><input type="number" min="0" step="0.1" value="0" onchange="data[&#39;6.3_acred&#39;]=parseFloat(this.value)||0; updateAll();">
+             <span class="field-points" data-calc-id="6.3_acred">0.00 pts</span></div></div></div></div></div>
 </div>
 
 <script>
@@ -481,210 +703,35 @@ const MAXIMOS = {
 };
 
 const FIELDS_INFO = {
-  '1.1_grado': {
-    name: 'Nota media expediente de grado',
-    help: 'Escala 1-4',
-    explanation: (fig) => `Se multiplica la nota (1-4) por un factor que varía según la figura. Máximo: ${MAXIMOS['1.1_grado'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['1.1_grado'][fig])
-  },
-  '1.1_master': {
-    name: 'Puntuación expediente de máster',
-    help: 'Máx con 2 másteres',
-    explanation: (fig) => `Máximo: ${MAXIMOS['1.1_master'][fig].toFixed(2)} pts. Si tienes 2 másteres o máster + tesina, se suma con ponderación.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['1.1_master'][fig])
-  },
-  '1.1_tesis': {
-    name: 'Calificación especial de tesis doctoral',
-    help: 'Solo máxima o mención internacional',
-    explanation: (fig) => `Solo si tu tesis tiene mención de doctorado europeo o "apto cum laude". Máximo: ${MAXIMOS['1.1_tesis'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['1.1_tesis'][fig])
-  },
-  '1.1_adics': {
-    name: 'Títulos adicionales',
-    help: 'Grados, másteres, doctorados complementarios',
-    explanation: (fig) => `0,1 pts por cada título adicional completado (máximo 5 títulos). Máximo: ${MAXIMOS['1.1_adics'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['1.1_adics'][fig])
-  },
-  '1.1_idiomas': {
-    name: 'Certificaciones de idiomas',
-    help: 'Nivel C1 o superior, distintos a lengua materna',
-    explanation: (fig) => `0,1 pts por cada idioma certificado C1+. Máximo: ${MAXIMOS['1.1_idiomas'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['1.1_idiomas'][fig])
-  },
-  '1.2_predoc': {
-    name: 'Contratos predoctorales',
-    help: 'Introduce total de meses',
-    explanation: (fig) => `Cálculo: (meses / 48) × máximo. Máximo: ${MAXIMOS['1.2_predoc'][fig].toFixed(2)} pts.`,
-    calc: (meses, fig) => Math.min((meses / 48) * MAXIMOS['1.2_predoc'][fig], MAXIMOS['1.2_predoc'][fig])
-  },
-  '1.2_postdoc': {
-    name: 'Contratos postdoctorales',
-    help: 'Ramón y Cajal > Juan de la Cierva > otros',
-    explanation: (fig) => `Cálculo: (meses / 24) × ratio × máximo. Beatriz Galindo/Ramón y Cajal = ×1.0, Juan de la Cierva = ×0.667, Otros = ×0.333. Máximo: ${MAXIMOS['1.2_postdoc'][fig].toFixed(2)} pts.`,
-    calc: (meses, fig, tipo) => {
-      const ratios = {'galindo': 1.0, 'cierva': 0.667, 'otros': 0.333};
-      const ratio = ratios[tipo] || 0.333;
-      return Math.min((meses / 24) * ratio * MAXIMOS['1.2_postdoc'][fig], MAXIMOS['1.2_postdoc'][fig]);
-    }
-  },
-  '1.2_otros': {
-    name: 'Otros contratos de investigación',
-    help: 'Contratos o becas de proyectos',
-    explanation: (fig) => `Puntuación directa. Máximo: ${MAXIMOS['1.2_otros'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['1.2_otros'][fig])
-  },
-  '2.1_doc': {
-    name: 'Años docencia en titulaciones oficiales',
-    help: '1 pt/año (o 0,5 si eres CU)',
-    explanation: (fig) => {
-      const rate = (fig === 'CU' || fig === 'CU_VIN') ? 0.5 : 1;
-      return `Cálculo: años × ${rate}. Máximo: ${MAXIMOS['2.1_doc'][fig].toFixed(2)} pts.`;
-    },
-    calc: (val, fig) => {
-      const rate = (fig === 'CU' || fig === 'CU_VIN') ? 0.5 : 1;
-      return Math.min(val * rate, MAXIMOS['2.1_doc'][fig]);
-    }
-  },
-  '2.2_cursimp': {
-    name: 'Horas formación docente impartida',
-    help: '0,1 pts cada 10 horas',
-    explanation: (fig) => `Cálculo: (horas / 10) × 0,1. Máximo: ${MAXIMOS['2.2_cursimp'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['2.2_cursimp'][fig])
-  },
-  '2.2_rea': {
-    name: 'Recursos educativos abiertos (REA)',
-    help: 'Hasta 0,1 pts por recurso',
-    explanation: (fig) => `Máximo: ${MAXIMOS['2.2_rea'][fig].toFixed(2)} pts. Se valoran recursos como moocs, materiales abiertos, etc.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['2.2_rea'][fig])
-  },
-  '2.2_noofic': {
-    name: 'Horas docencia no oficial',
-    help: '0,1 pts cada 100 horas',
-    explanation: (fig) => `Cálculo: (horas / 100) × 0,1. Máximo: ${MAXIMOS['2.2_noofic'][fig].toFixed(2)} pts. Formación continua, cursos de extension, etc.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['2.2_noofic'][fig])
-  },
-  '2.3_calidad': {
-    name: 'Evaluaciones de calidad docente (Docentia)',
-    help: 'Excelente=1, Muy Favorable=0,5, Favorable=0,1',
-    explanation: (fig) => `Según el resultado de la evaluación. Máximo: ${MAXIMOS['2.3_calidad'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['2.3_calidad'][fig])
-  },
-  '2.4_innov': {
-    name: 'Proyectos innovación docente',
-    help: 'Proyectos, formación, publicaciones',
-    explanation: (fig) => `0,1 por proyecto aprobado. Máximo: ${MAXIMOS['2.4_innov'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['2.4_innov'][fig])
-  },
-  '2.5_tutor': {
-    name: 'Tutorización de TFG/TFM/PIF',
-    help: '0,1 cada 10 trabajos',
-    explanation: (fig) => `Cálculo: (trabajos / 10) × 0,1. Máximo: ${MAXIMOS['2.5_tutor'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['2.5_tutor'][fig])
-  },
-  '3.1_proyectos': {
-    name: 'Proyectos competitivos',
-    help: 'Europeo/Nacional/Regional',
-    explanation: (fig) => `Proyectos europeos: 0,5 pts cada 3 años. Nacionales: 0,3 pts. Regionales: 0,2 pts. Máximo: ${MAXIMOS['3.1_proyectos'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['3.1_proyectos'][fig])
-  },
-  '3.2_publics': {
-    name: 'Publicaciones científicas',
-    help: 'Por categoría A, B, C, D',
-    explanation: (fig) => {
-      let rates = {A:0.4, B:0.2, C:0.1, D:0.05};
-      if (fig === 'PPL' || fig === 'VIN') rates = {A:0.2, B:0.1, C:0.05, D:0.025};
-      if (fig === 'CU' || fig === 'CU_VIN') rates = {A:0.1, B:0.05, C:0.025, D:0.0125};
-      return `Tasas: A=${rates.A}, B=${rates.B}, C=${rates.C}, D=${rates.D}. Máximo C+D: 1/3 del total. Máximo: ${MAXIMOS['3.2_publics'][fig].toFixed(2)} pts.`;
-    },
-    calc: (val, fig) => val // Se calcula especialmente
-  },
-  '3.3_congresos': {
-    name: 'Congresos y comunicaciones',
-    help: 'Invitaciones, orales, pósters',
-    explanation: (fig) => `Internacionales: Invit=0,2, Oral=0,1, Póster=0,05. Nacionales: Invit=0,1, Oral=0,05, Póster=0,02. Máximo: ${MAXIMOS['3.3_congresos'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => val // Se calcula especialmente
-  },
-  '3.4_sexenios': {
-    name: 'Sexenios de investigación',
-    help: 'Número total de sexenios',
-    explanation: (fig) => {
-      const rate = (fig === 'PPL' || fig === 'VIN') ? 0.5 : 0.25;
-      return `Cálculo: sexenios × ${rate}. Máximo: ${MAXIMOS['3.4_sexenios'][fig].toFixed(2)} pts.`;
-    },
-    calc: (val, fig) => {
-      const rate = (fig === 'PPL' || fig === 'VIN') ? 0.5 : 0.25;
-      return Math.min(val * rate, MAXIMOS['3.4_sexenios'][fig]);
-    }
-  },
-  '3.5_estancias': {
-    name: 'Estancias de investigación',
-    help: 'Meses en instituciones extranjeras',
-    explanation: (fig) => {
-      const rate = (fig === 'PAD' || fig === 'SUS') ? 0.2 : 0.1;
-      return `Cálculo: meses × ${rate}. Máximo: ${MAXIMOS['3.5_estancias'][fig].toFixed(2)} pts.`;
-    },
-    calc: (val, fig) => {
-      const rate = (fig === 'PAD' || fig === 'SUS') ? 0.2 : 0.1;
-      return Math.min(val * rate, MAXIMOS['3.5_estancias'][fig]);
-    }
-  },
-  '4.1_direccion': {
-    name: 'Dirección de proyectos/equipos',
-    help: 'IP europeo, dirección grupo',
-    explanation: (fig) => `IP europeo: 0,3 pts cada 3 años. Dirección grupo: hasta máximo. Máximo: ${MAXIMOS['4.1_direccion'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['4.1_direccion'][fig])
-  },
-  '4.2_tesis': {
-    name: 'Tesis doctorales dirigidas',
-    help: '0,1 pts por tesis',
-    explanation: (fig) => `Cálculo: tesis × 0,1. Máximo: ${MAXIMOS['4.2_tesis'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['4.2_tesis'][fig])
-  },
-  '4.3_gestion': {
-    name: 'Cargos de dirección y gestión',
-    help: 'Rector/Decano/Vicedecano/etc',
-    explanation: (fig) => `Rector/Vicerrector/Decano: 0,2 pts/año. Vicedecano/Director: 0,1 pts/año. Máximo: ${MAXIMOS['4.3_gestion'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['4.3_gestion'][fig])
-  },
-  '4.4_organos': {
-    name: 'Órganos científicos y comités',
-    help: 'Consejos, comisiones, etc',
-    explanation: (fig) => `Hasta 0,1 pts/año de participación. Máximo: ${MAXIMOS['4.4_organos'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['4.4_organos'][fig])
-  },
-  '4.5_premios': {
-    name: 'Premios y reconocimientos',
-    help: 'Grado=0,2, Máster=0,1, Doctor=0,2',
-    explanation: (fig) => `Según el nivel del premio. Máximo: ${MAXIMOS['4.5_premios'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['4.5_premios'][fig])
-  },
-  '5.1_expprof': {
-    name: 'Años experiencia profesional',
-    help: 'Máx 1 pt/año',
-    explanation: (fig) => `Cálculo: años × 1. Máximo: ${MAXIMOS['5.1_expprof'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['5.1_expprof'][fig])
-  },
-  '6.1_pdi': {
-    name: 'Años como PDI en universidad pública',
-    help: 'Tiempo completo=1pt, parcial=0,5pt',
-    explanation: (fig) => `Cálculo: años × 1 (completo) o × 0,5 (parcial). Máximo: ${MAXIMOS['6.1_pdi'][fig].toFixed(2)} pts.`,
-    calc: (val, fig) => Math.min(val, MAXIMOS['6.1_pdi'][fig])
-  },
-  '6.2_doctor': {
-    name: '¿Grado de doctor?',
-    help: '1 si tienes, 0 si no',
-    explanation: (fig) => {
-      const pts = MAXIMOS['6.2_doctor'][fig];
-      return pts > 0 ? `Grado de doctor: ${pts} pts. (0 pts si no lo tienes)` : `Tu figura requiere doctorado: 0 pts adicionales.`;
-    },
-    calc: (val, fig) => val >= 1 ? MAXIMOS['6.2_doctor'][fig] : 0
-  },
-  '6.3_acred': {
-    name: 'Acreditación PAD o superior',
-    help: '1 si tienes, 0 si no. Válido hasta 12/04/2027',
-    explanation: (fig) => `Si tienes acreditación PAD (o superior): 6 pts. Sin acreditación: 0 pts.`,
-    calc: (val, fig) => val >= 1 ? 6 : 0
-  },
+  '1.1_grado': {name: 'Nota media expediente de grado', help: 'Escala 1-4', explanation: (fig) => `Se multiplica la nota (1-4) por un factor que varía según la figura. Máximo: ${MAXIMOS['1.1_grado'][fig].toFixed(2)} pts.`},
+  '1.1_master': {name: 'Puntuación expediente de máster', help: 'Máx con 2 másteres', explanation: (fig) => `Máximo: ${MAXIMOS['1.1_master'][fig].toFixed(2)} pts. Si tienes 2 másteres o máster + tesina, se suma con ponderación.`},
+  '1.1_tesis': {name: 'Calificación especial de tesis doctoral', help: 'Solo máxima o mención internacional', explanation: (fig) => `Solo si tu tesis tiene mención de doctorado europeo o "apto cum laude". Máximo: ${MAXIMOS['1.1_tesis'][fig].toFixed(2)} pts.`},
+  '1.1_adics': {name: 'Títulos adicionales', help: 'Grados, másteres, doctorados complementarios', explanation: (fig) => `0,1 pts por cada título adicional completado (máximo 5 títulos). Máximo: ${MAXIMOS['1.1_adics'][fig].toFixed(2)} pts.`},
+  '1.1_idiomas': {name: 'Certificaciones de idiomas', help: 'Nivel C1 o superior, distintos a lengua materna', explanation: (fig) => `0,1 pts por cada idioma certificado C1+. Máximo: ${MAXIMOS['1.1_idiomas'][fig].toFixed(2)} pts.`},
+  '1.2_predoc': {name: 'Contratos predoctorales', help: 'Introduce total de meses', explanation: (fig) => `Cálculo: (meses / 48) × máximo. Máximo: ${MAXIMOS['1.2_predoc'][fig].toFixed(2)} pts.`},
+  '1.2_postdoc': {name: 'Contratos postdoctorales', help: 'Ramón y Cajal > Juan de la Cierva > otros', explanation: (fig) => `Cálculo: (meses / 24) × ratio × máximo. Beatriz Galindo/Ramón y Cajal = ×1.0, Juan de la Cierva = ×0.667, Otros = ×0.333. Máximo: ${MAXIMOS['1.2_postdoc'][fig].toFixed(2)} pts.`},
+  '1.2_otros': {name: 'Otros contratos de investigación', help: 'Contratos o becas de proyectos', explanation: (fig) => `Puntuación directa. Máximo: ${MAXIMOS['1.2_otros'][fig].toFixed(2)} pts.`},
+  '2.1_doc': {name: 'Años docencia en titulaciones oficiales', help: '1 pt/año (o 0,5 si eres CU)', explanation: (fig) => {const rate = (fig === 'CU' || fig === 'CU_VIN') ? 0.5 : 1; return `Cálculo: años × ${rate}. Máximo: ${MAXIMOS['2.1_doc'][fig].toFixed(2)} pts.`;}},
+  '2.2_cursimp': {name: 'Horas formación docente impartida', help: '0,1 pts cada 10 horas', explanation: (fig) => `Cálculo: (horas / 10) × 0,1. Máximo: ${MAXIMOS['2.2_cursimp'][fig].toFixed(2)} pts.`},
+  '2.2_rea': {name: 'Recursos educativos abiertos (REA)', help: 'Hasta 0,1 pts por recurso', explanation: (fig) => `Máximo: ${MAXIMOS['2.2_rea'][fig].toFixed(2)} pts. Se valoran recursos como moocs, materiales abiertos, etc.`},
+  '2.2_noofic': {name: 'Horas docencia no oficial', help: '0,1 pts cada 100 horas', explanation: (fig) => `Cálculo: (horas / 100) × 0,1. Máximo: ${MAXIMOS['2.2_noofic'][fig].toFixed(2)} pts. Formación continua, cursos de extension, etc.`},
+  '2.3_calidad': {name: 'Evaluaciones de calidad docente (Docentia)', help: 'Excelente=1, Muy Favorable=0,5, Favorable=0,1', explanation: (fig) => `Según el resultado de la evaluación. Máximo: ${MAXIMOS['2.3_calidad'][fig].toFixed(2)} pts.`},
+  '2.4_innov': {name: 'Proyectos innovación docente', help: 'Proyectos, formación, publicaciones', explanation: (fig) => `0,1 por proyecto aprobado. Máximo: ${MAXIMOS['2.4_innov'][fig].toFixed(2)} pts.`},
+  '2.5_tutor': {name: 'Tutorización de TFG/TFM/PIF', help: '0,1 cada 10 trabajos', explanation: (fig) => `Cálculo: (trabajos / 10) × 0,1. Máximo: ${MAXIMOS['2.5_tutor'][fig].toFixed(2)} pts.`},
+  '3.1_proyectos': {name: 'Proyectos competitivos', help: 'Europeo/Nacional/Regional', explanation: (fig) => `Europeo: 0,5 pts/3 años. Nacional: 0,3 pts. Regional: 0,2 pts. Máximo: ${MAXIMOS['3.1_proyectos'][fig].toFixed(2)} pts.`},
+  '3.2_publics': {name: 'Publicaciones científicas', help: 'Por categoría A, B, C, D', explanation: (fig) => {let rates = {A:0.4, B:0.2, C:0.1, D:0.05}; if (fig === 'PPL' || fig === 'VIN') rates = {A:0.2, B:0.1, C:0.05, D:0.025}; if (fig === 'CU' || fig === 'CU_VIN') rates = {A:0.1, B:0.05, C:0.025, D:0.0125}; return `Tasas: A=${rates.A}, B=${rates.B}, C=${rates.C}, D=${rates.D}. Máximo C+D: 1/3 del total. Máximo: ${MAXIMOS['3.2_publics'][fig].toFixed(2)} pts.`;}},
+  '3.3_congresos': {name: 'Congresos y comunicaciones', help: 'Invitaciones, orales, pósters', explanation: (fig) => `Internacionales: Invit=0,2, Oral=0,1, Póster=0,05. Nacionales: Invit=0,1, Oral=0,05, Póster=0,02. Máximo: ${MAXIMOS['3.3_congresos'][fig].toFixed(2)} pts.`},
+  '3.4_sexenios': {name: 'Sexenios de investigación', help: 'Introduce número total', explanation: (fig) => {const rate = (fig === 'PPL' || fig === 'VIN') ? 0.5 : 0.25; return `Cada sexenio = ${rate} pts. Máximo: ${MAXIMOS['3.4_sexenios'][fig].toFixed(2)} pts.`;}},
+  '3.5_estancias': {name: 'Estancias de investigación', help: 'Meses en instituciones extranjeras', explanation: (fig) => {const rate = (fig === 'PAD' || fig === 'SUS') ? 0.2 : 0.1; return `Cálculo: meses × ${rate}. Máximo: ${MAXIMOS['3.5_estancias'][fig].toFixed(2)} pts.`;}},
+  '4.1_direccion': {name: 'Dirección de proyectos competitivos', help: 'IP Europeo, Nacional o Regional', explanation: (fig) => `IP Europeo: 0,3 pts/3 años. IP Nacional: 0,2 pts. IP Regional: 0,15 pts. Máximo: ${MAXIMOS['4.1_direccion'][fig].toFixed(2)} pts. (Introduce valor calculado)`},
+  '4.2_tesis': {name: 'Tesis doctorales dirigidas', help: 'Número total de tesis', explanation: (fig) => `Cálculo: tesis × 0,1 (ASO: ×0,1, PAD: ×0,1, PPL: ×0,1, etc). Máximo: ${MAXIMOS['4.2_tesis'][fig].toFixed(2)} pts.`},
+  '4.3_gestion': {name: 'Cargos de dirección y gestión', help: 'Rector/Decano/Vicedecano/etc', explanation: (fig) => `Rector/Vicerrector/Decano: 0,2 pts/año. Vicedecano/Director: 0,1 pts/año. Máximo: ${MAXIMOS['4.3_gestion'][fig].toFixed(2)} pts.`},
+  '4.4_organos': {name: 'Órganos científicos y comités', help: 'Consejos, comisiones, etc', explanation: (fig) => `Hasta 0,1 pts/año de participación. Máximo: ${MAXIMOS['4.4_organos'][fig].toFixed(2)} pts.`},
+  '4.5_premios': {name: 'Premios y reconocimientos', help: 'Grado=0,2, Máster=0,1, Doctor=0,2', explanation: (fig) => `Según el nivel del premio. Máximo: ${MAXIMOS['4.5_premios'][fig].toFixed(2)} pts.`},
+  '5.1_expprof': {name: 'Años experiencia profesional', help: 'Máx 1 pt/año', explanation: (fig) => `Cálculo: años × 1. Máximo: ${MAXIMOS['5.1_expprof'][fig].toFixed(2)} pts.`},
+  '6.1_pdi': {name: 'Años como PDI en universidad pública', help: 'Tiempo completo=1pt, parcial=0,5pt', explanation: (fig) => `Cálculo: años × 1 (completo) o × 0,5 (parcial). Máximo: ${MAXIMOS['6.1_pdi'][fig].toFixed(2)} pts.`},
+  '6.2_doctor': {name: '¿Grado de doctor?', help: '1 si tienes, 0 si no', explanation: (fig) => {const pts = MAXIMOS['6.2_doctor'][fig]; return pts > 0 ? `Grado de doctor: ${pts} pts. (0 pts si no lo tienes)` : `Tu figura requiere doctorado: 0 pts adicionales.`;}},
+  '6.3_acred': {name: 'Acreditación PAD o superior', help: '1 si tienes, 0 si no. Válido hasta 12/04/2027', explanation: (fig) => `Si tienes acreditación PAD (o superior): 6 pts. Sin acreditación: 0 pts.`},
 };
 
 const SECS = [
@@ -710,7 +757,6 @@ let data = {
 };
 
 function getFig() { return document.getElementById('figura').value; }
-
 function getMax(id) { return MAXIMOS[id]?.[getFig()] ?? 0; }
 
 function calc(id) {
@@ -739,7 +785,6 @@ function calc(id) {
   }
   
   if (id === '1.2_otros') return Math.min(val, getMax(id));
-  
   if (id === '2.1_doc') {
     const max = getMax(id);
     const pts = (fig === 'CU' || fig === 'CU_VIN') ? val * 0.5 : val * 1;
@@ -788,7 +833,11 @@ function calc(id) {
   }
   
   if (id === '4.1_direccion') return Math.min(val, getMax(id));
-  if (id === '4.2_tesis') return Math.min(val, getMax(id));
+  if (id === '4.2_tesis') {
+    const tesis = val || 0;
+    const max = getMax(id);
+    return Math.min(tesis * 0.1, max);
+  }
   if (id === '4.3_gestion') return Math.min(val, getMax(id));
   if (id === '4.4_organos') return Math.min(val, getMax(id));
   if (id === '4.5_premios') return Math.min(val, getMax(id));
@@ -823,27 +872,18 @@ function updateAll() {
   html += `<div class="scard total"><div class="slabel">Total</div><div class="sval">${total.toFixed(2)}</div></div>`;
   document.getElementById('summary').innerHTML = html;
   
-  // Actualizar puntos mostrados en cada campo
   document.querySelectorAll('[data-calc-id]').forEach(el => {
     const fieldId = el.getAttribute('data-calc-id');
     let pts = 0;
-    if (fieldId === '1.2_predoc') {
-      pts = calc('1.2_predoc');
-    } else if (fieldId === '1.2_postdoc') {
-      pts = calc('1.2_postdoc');
-    } else if (fieldId === '3.2_publics') {
-      pts = calc('3.2_publics');
-    } else if (fieldId === '3.3_congresos') {
-      pts = calc('3.3_congresos');
-    } else if (fieldId === '3.4_sexenios') {
-      pts = calc('3.4_sexenios');
-    } else if (fieldId === '3.5_estancias') {
-      pts = calc('3.5_estancias');
-    } else if (fieldId === '2.1_doc') {
-      pts = calc('2.1_doc');
-    } else {
-      pts = calc(fieldId);
-    }
+    if (fieldId === '1.2_predoc') pts = calc('1.2_predoc');
+    else if (fieldId === '1.2_postdoc') pts = calc('1.2_postdoc');
+    else if (fieldId === '3.2_publics') pts = calc('3.2_publics');
+    else if (fieldId === '3.3_congresos') pts = calc('3.3_congresos');
+    else if (fieldId === '3.4_sexenios') pts = calc('3.4_sexenios');
+    else if (fieldId === '3.5_estancias') pts = calc('3.5_estancias');
+    else if (fieldId === '2.1_doc') pts = calc('2.1_doc');
+    else if (fieldId === '4.2_tesis') pts = calc('4.2_tesis');
+    else pts = calc(fieldId);
     el.textContent = pts.toFixed(2) + ' pts';
   });
 }
@@ -853,7 +893,6 @@ function createField(fieldId) {
   if (!info) return '';
   
   const fig = getFig();
-  const max = getMax(fieldId);
   
   let html = `<div class="field-group">
     <div class="field-header">
@@ -967,203 +1006,9 @@ function resetAll() {
   updateAll();
 }
 
-async function handlePdfUpload(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  
-  const progressContainer = document.getElementById('progressContainer');
-  const progressFill = document.getElementById('progressFill');
-  const statusMessage = document.getElementById('statusMessage');
-  const uploadBtn = document.getElementById('uploadBtn');
-
-  progressContainer.style.display = 'block';
-  progressFill.style.width = '10%';
-  statusMessage.textContent = '📖 Leyendo PDF...';
-  statusMessage.className = 'status-message info';
-  uploadBtn.classList.add('loading');
-  uploadBtn.disabled = true;
-
-  try {
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      const base64Data = e.target.result.split(',')[1];
-      progressFill.style.width = '30%';
-      statusMessage.textContent = '🤖 Analizando con Claude...';
-
-      try {
-        const apiKey = prompt('Por favor, introduce tu API key de Claude (desde https://console.anthropic.com):', '');
-        if (!apiKey) {
-          statusMessage.textContent = '❌ Operación cancelada';
-          statusMessage.className = 'status-message error';
-          return;
-        }
-
-        const response = await fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': apiKey,
-            'anthropic-version': '2023-06-01'
-          },
-          body: JSON.stringify({
-            model: 'claude-opus-4-1-20250805',
-            max_tokens: 2000,
-            messages: [
-              {
-                role: 'user',
-                content: [
-                  {
-                    type: 'text',
-                    text: `Analiza este CV en PDF y extrae la siguiente información en formato JSON puro. Sé conservador en tus estimaciones.
-
-Devuelve SOLO un JSON válido (sin markdown):
-{
-  "grado_nota": 3.5,
-  "master_puntos": 0.8,
-  "tesis_especial": 0.2,
-  "titulos_adicionales": 1,
-  "idiomas_c1": 2,
-  "predoc_meses": 0,
-  "postdoc_meses": 0,
-  "postdoc_tipo": "cierva",
-  "otros_contratos": 0,
-  "anios_docencia": 5,
-  "horas_formacion_docente": 0,
-  "rea_recursos": 0,
-  "horas_docencia_nooficial": 0,
-  "docentia_puntos": 0,
-  "proyectos_innovacion": 0,
-  "tutorizacion": 0,
-  "proyectos_competitivos": 0,
-  "articulos_catA": 0,
-  "articulos_catB": 0,
-  "articulos_catC": 0,
-  "articulos_catD": 0,
-  "congresos_intl_inv": 0,
-  "congresos_intl_oral": 0,
-  "congresos_intl_poster": 0,
-  "congresos_nat_inv": 0,
-  "congresos_nat_oral": 0,
-  "congresos_nat_poster": 0,
-  "sexenios": 0,
-  "estancias_meses": 0,
-  "direccion_proyectos": 0,
-  "tesis_dirigidas": 0,
-  "cargos_gestion": 0,
-  "organos_cientificos": 0,
-  "premios": 0,
-  "anios_experiencia_prof": 0,
-  "anios_pdi_publico": 5,
-  "tiene_doctorado": 1,
-  "acreditacion_pad": 0
-}`
-                  },
-                  {
-                    type: 'document',
-                    source: {
-                      type: 'base64',
-                      media_type: 'application/pdf',
-                      data: base64Data
-                    }
-                  }
-                ]
-              }
-            ]
-          })
-        });
-
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
-        }
-
-        progressFill.style.width = '70%';
-        const result = await response.json();
-        const jsonText = result.content[0].text;
-        const jsonMatch = jsonText.match(/\{[\s\S]*\}/);
-        
-        if (!jsonMatch) throw new Error('No JSON encontrado');
-        const parsed = JSON.parse(jsonMatch[0]);
-        
-        progressFill.style.width = '85%';
-
-        // Rellenar datos
-        data['1.1_grado'] = parsed.grado_nota || 0;
-        data['1.1_master'] = parsed.master_puntos || 0;
-        data['1.1_tesis'] = parsed.tesis_especial || 0;
-        data['1.1_adics'] = parsed.titulos_adicionales || 0;
-        data['1.1_idiomas'] = parsed.idiomas_c1 || 0;
-        data['1.2_predoc_meses'] = parsed.predoc_meses || 0;
-        data['1.2_postdoc_meses'] = parsed.postdoc_meses || 0;
-        data['1.2_postdoc_tipo'] = parsed.postdoc_tipo || 'cierva';
-        data['1.2_otros'] = parsed.otros_contratos || 0;
-        data['2.1_doc'] = parsed.anios_docencia || 0;
-        data['2.2_cursimp'] = parsed.horas_formacion_docente || 0;
-        data['2.2_rea'] = parsed.rea_recursos || 0;
-        data['2.2_noofic'] = parsed.horas_docencia_nooficial || 0;
-        data['2.3_calidad'] = parsed.docentia_puntos || 0;
-        data['2.4_innov'] = parsed.proyectos_innovacion || 0;
-        data['2.5_tutor'] = parsed.tutorizacion || 0;
-        data['3.1_proyectos'] = parsed.proyectos_competitivos || 0;
-        data['3.2_catA'] = parsed.articulos_catA || 0;
-        data['3.2_catB'] = parsed.articulos_catB || 0;
-        data['3.2_catC'] = parsed.articulos_catC || 0;
-        data['3.2_catD'] = parsed.articulos_catD || 0;
-        data['3.3_intlInv'] = parsed.congresos_intl_inv || 0;
-        data['3.3_intlOral'] = parsed.congresos_intl_oral || 0;
-        data['3.3_intlPost'] = parsed.congresos_intl_poster || 0;
-        data['3.3_natInv'] = parsed.congresos_nat_inv || 0;
-        data['3.3_natOral'] = parsed.congresos_nat_oral || 0;
-        data['3.3_natPost'] = parsed.congresos_nat_poster || 0;
-        data['3.4_sexenios'] = parsed.sexenios || 0;
-        data['3.5_estancias'] = parsed.estancias_meses || 0;
-        data['4.1_direccion'] = parsed.direccion_proyectos || 0;
-        data['4.2_tesis'] = parsed.tesis_dirigidas || 0;
-        data['4.3_gestion'] = parsed.cargos_gestion || 0;
-        data['4.4_organos'] = parsed.organos_cientificos || 0;
-        data['4.5_premios'] = parsed.premios || 0;
-        data['5.1_expprof'] = parsed.anios_experiencia_prof || 0;
-        data['6.1_pdi'] = parsed.anios_pdi_publico || 0;
-        data['6.2_doctor'] = parsed.tiene_doctorado || 0;
-        data['6.3_acred'] = parsed.acreditacion_pad || 0;
-
-        progressFill.style.width = '95%';
-        
-        // Actualizar inputs
-        document.querySelectorAll('input[type=number]').forEach(el => {
-          const parent = el.closest('[data-calc-id]') || el.closest('.field-input-wrapper');
-          if (!parent) return;
-          
-          // Mapeo de atributos a datos
-          for (let key in data) {
-            if (el.value !== undefined && key.includes(el.parentElement?.id || '')) {
-              el.value = data[key];
-              break;
-            }
-          }
-        });
-
-        progressFill.style.width = '100%';
-        statusMessage.textContent = '✅ CV analizado. Datos rellenados.';
-        statusMessage.className = 'status-message success';
-        updateAll();
-      } catch (apiError) {
-        statusMessage.textContent = `❌ Error: ${apiError.message}`;
-        statusMessage.className = 'status-message error';
-      }
-    };
-    reader.readAsDataURL(file);
-  } catch (err) {
-    statusMessage.textContent = `❌ Error: ${err.message}`;
-    statusMessage.className = 'status-message error';
-  } finally {
-    uploadBtn.classList.remove('loading');
-    uploadBtn.disabled = false;
-    document.getElementById('pdfInput').value = '';
-  }
-}
-
 createApp();
 updateAll();
 </script>
-</body>
-</html>
+
+
+</body></html>
