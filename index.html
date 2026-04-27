@@ -38,7 +38,7 @@
     }
     
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       font-size: 15px;
       color: var(--color-text-primary);
       background: var(--color-bg-primary);
@@ -79,7 +79,7 @@
       color: var(--color-text-secondary);
     }
     
-    select {
+    select, input[type=number] {
       font-size: 13px;
       padding: 8px 12px;
       border-radius: 6px;
@@ -150,11 +150,6 @@
       cursor: pointer;
       user-select: none;
       background: var(--color-bg-secondary);
-      transition: background 0.2s;
-    }
-    
-    .sec-header:hover {
-      background: var(--color-bg-tertiary);
     }
     
     .sec-title {
@@ -177,16 +172,6 @@
       color: var(--color-info);
     }
     
-    .sec-chevron {
-      font-size: 12px;
-      color: var(--color-text-tertiary);
-      transition: transform 0.2s;
-    }
-    
-    .sec-chevron.open {
-      transform: rotate(180deg);
-    }
-    
     .sec-body {
       padding: 0 16px;
       display: none;
@@ -197,25 +182,14 @@
       padding: 12px 16px;
     }
     
-    .subsec {
-      margin-bottom: 16px;
-    }
-    
-    .subsec-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--color-text-secondary);
-      margin-bottom: 8px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid var(--color-border);
-    }
-    
     .field {
       display: grid;
       grid-template-columns: 1fr auto;
       align-items: center;
       gap: 8px;
       margin-bottom: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--color-border);
     }
     
     .field label {
@@ -223,54 +197,10 @@
       color: var(--color-text-primary);
     }
     
-    .field .hint {
-      font-size: 11px;
-      color: var(--color-text-tertiary);
-      margin-top: 2px;
-    }
-    
     .field input[type=number] {
       width: 90px;
-      font-size: 13px;
       padding: 6px 8px;
-      border-radius: 6px;
-      border: 1px solid var(--color-border);
-      background: var(--color-bg-primary);
-      color: var(--color-text-primary);
       text-align: right;
-    }
-    
-    .field input[type=number]:focus {
-      outline: none;
-      border-color: var(--color-info);
-    }
-    
-    .subscore {
-      font-size: 12px;
-      color: var(--color-text-secondary);
-      text-align: right;
-      margin-top: 6px;
-      margin-bottom: 10px;
-    }
-    
-    .subscore span {
-      font-weight: 600;
-      color: var(--color-info);
-    }
-    
-    .progress-bar {
-      height: 4px;
-      border-radius: 2px;
-      background: var(--color-border);
-      margin-top: 6px;
-      overflow: hidden;
-    }
-    
-    .progress-fill {
-      height: 100%;
-      border-radius: 2px;
-      background: var(--color-info);
-      transition: width 0.3s;
     }
     
     .reset-btn {
@@ -281,57 +211,49 @@
       background: transparent;
       color: var(--color-text-secondary);
       cursor: pointer;
-      transition: background 0.2s;
     }
-    
-    .reset-btn:hover {
-      background: var(--color-bg-secondary);
-    }
-    
-    .compound-field {
+
+    .grid2 {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr 1fr;
       gap: 8px;
-      margin-bottom: 8px;
+      margin: 8px 0;
       padding: 8px;
       background: var(--color-bg-tertiary);
       border-radius: 6px;
     }
-    
-    .compound-field label {
+
+    .grid2 label {
       font-size: 12px;
       color: var(--color-text-secondary);
     }
-    
-    .compound-field input, .compound-field select {
-      width: 100%;
-      font-size: 13px;
-      padding: 6px 8px;
-      border-radius: 6px;
-      border: 1px solid var(--color-border);
-      background: var(--color-bg-primary);
-      color: var(--color-text-primary);
-    }
-    
-    .field-group-title {
+
+    .grid2 input, .grid2 select {
       font-size: 12px;
+      padding: 6px;
+      width: 100%;
+    }
+
+    .subsec-title {
+      font-size: 13px;
       font-weight: 600;
-      color: var(--color-text-primary);
-      margin-top: 6px;
-      margin-bottom: 6px;
+      margin-top: 12px;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--color-border);
     }
   </style>
 </head>
 <body>
 <div class="app">
   <div class="header">
-    <h1>Calculadora del baremo USAL</h1>
+    <h1>Calculadora del Baremo USAL</h1>
     <p>Consejo de Gobierno de 25 de julio de 2024 — estimación orientativa</p>
   </div>
 
   <div class="figura-sel">
     <label>Tipo de plaza:</label>
-    <select id="figura" onchange="recalc()">
+    <select id="figura" onchange="updateAll()">
       <option value="ASO">Asociado (ASO)</option>
       <option value="PAD">Profesor Ayudante Doctor (PAD)</option>
       <option value="PPL" selected>PPL / Titular de Universidad (TU)</option>
@@ -380,38 +302,6 @@ const MAXIMOS = {
   "6.3_acred":     {ASO:6,PAD:6,PPL:6,VIN:6,CU:6,CU_VIN:6,SUS:6},
 };
 
-const FIELDS = [
-  {id:'1.1_grado', label:'Nota media expediente de grado (1-4)', hint:'Escala 1-4', sec:0, sub:0, type:'simple'},
-  {id:'1.1_master', label:'Puntuación expediente de máster', hint:'Máx con 2 másteres o 1+tesina', sec:0, sub:0, type:'simple'},
-  {id:'1.1_tesis', label:'Calificación especial de tesis', hint:'Solo máxima o mención internacional', sec:0, sub:0, type:'simple'},
-  {id:'1.1_adics', label:'Títulos adicionales', hint:'Grados, másteres, doctorados', sec:0, sub:0, type:'simple'},
-  {id:'1.1_idiomas', label:'Certificaciones de idiomas (C1+)', hint:'Idiomas distintos a lengua materna', sec:0, sub:0, type:'simple'},
-  {id:'1.2_predoc', label:'Contratos predoctorales (meses)', hint:'Sistema calcula automáticamente', sec:0, sub:1, type:'predoc'},
-  {id:'1.2_postdoc', label:'Contratos postdoctorales (meses)', hint:'Ramón y Cajal > Juan de la Cierva > otros', sec:0, sub:1, type:'postdoc'},
-  {id:'1.2_otros', label:'Otros contratos de investigación', hint:'Contratos o becas de proyectos', sec:0, sub:1, type:'simple'},
-  {id:'2.1_doc', label:'Años docencia en titulaciones oficiales', hint:'1 punto/año ≥180h', sec:1, sub:0, type:'simple'},
-  {id:'2.2_cursimp', label:'Horas formación docente impartida', hint:'0,1 pts cada 10 horas', sec:1, sub:1, type:'simple'},
-  {id:'2.2_rea', label:'Recursos educativos abiertos', hint:'Hasta 0,1 pts por recurso', sec:1, sub:1, type:'simple'},
-  {id:'2.2_noofic', label:'Horas docencia no oficial', hint:'0,1 pts cada 100 horas', sec:1, sub:1, type:'simple'},
-  {id:'2.3_calidad', label:'Evaluaciones Docentia', hint:'Excelente=1, Muy Favorable=0.5, Favorable=0.1', sec:1, sub:2, type:'simple'},
-  {id:'2.4_innov', label:'Proyectos innovación docente', hint:'0,1 por proyecto; formación; publicaciones', sec:1, sub:3, type:'simple'},
-  {id:'2.5_tutor', label:'Tutorización TFG/TFM/PIF', hint:'0,1 cada 10 TFG/TFM', sec:1, sub:4, type:'simple'},
-  {id:'3.1_proyectos', label:'Proyectos competitivos', hint:'Europeo=0.5/3años; Nacional=0.3; Regional=0.2', sec:2, sub:0, type:'simple'},
-  {id:'3.2_publics', label:'Publicaciones científicas', hint:'Por categoría A,B,C,D', sec:2, sub:1, type:'publics'},
-  {id:'3.3_congresos', label:'Congresos y comunicaciones', hint:'Invitaciones, orales, pósters', sec:2, sub:2, type:'congresos'},
-  {id:'3.4_sexenios', label:'Número de sexenios', hint:'0.25 pts cada uno (0.5 PPL/TU)', sec:2, sub:3, type:'simple'},
-  {id:'3.5_estancias', label:'Meses estancias investigación', hint:'0.1 pts/mes (0.2 PAD/SUS)', sec:2, sub:4, type:'simple'},
-  {id:'4.1_direccion', label:'Dirección proyectos/equipos', hint:'IP europeo=0.3/3años', sec:3, sub:0, type:'simple'},
-  {id:'4.2_tesis', label:'Tesis doctorales dirigidas', hint:'0.1 pts por tesis', sec:3, sub:1, type:'simple'},
-  {id:'4.3_gestion', label:'Cargos dirección gestión', hint:'Rector/Decano=0.2/año; Vicedecano=0.1/año', sec:3, sub:2, type:'simple'},
-  {id:'4.4_organos', label:'Órganos científicos y comités', hint:'Hasta 0.1 pts/año', sec:3, sub:3, type:'simple'},
-  {id:'4.5_premios', label:'Premios y reconocimientos', hint:'Grado=0.2; Máster=0.1; Doctorado=0.2', sec:3, sub:4, type:'simple'},
-  {id:'5.1_expprof', label:'Años experiencia profesional', hint:'Máx 1 punto por año', sec:4, sub:0, type:'simple'},
-  {id:'6.1_pdi', label:'Años PDI universidad pública', hint:'1 punto/año tiempo completo; 0.5 parcial', sec:5, sub:0, type:'simple'},
-  {id:'6.2_doctor', label:'¿Grado de doctor? (1=sí, 0=no)', hint:'Solo en figuras donde no es requisito', sec:5, sub:1, type:'simple'},
-  {id:'6.3_acred', label:'¿Acreditación PAD+? (1=sí, 0=no)', hint:'Válido hasta 12/04/2027', sec:5, sub:2, type:'simple'},
-];
-
 const SECS = [
   'I. Formación académica e investigadora',
   'II. Docencia',
@@ -421,237 +311,240 @@ const SECS = [
   'VI. Méritos preferentes',
 ];
 
-const SUBS = [
-  ['1.1 Expediente académico','1.2 Contratos de investigación'],
-  ['2.1 Docencia en titulaciones oficiales','2.2 Formación permanente y REA','2.3 Calidad docente','2.4 Innovación docente','2.5 Tutorización'],
-  ['3.1 Proyectos competitivos','3.2 Publicaciones científicas','3.3 Congresos y transferencia','3.4 Sexenios','3.5 Estancias'],
-  ['4.1 Dirección de equipos/proyectos','4.2 Dirección de tesis','4.3 Dirección y gestión','4.4 Órganos científicos','4.5 Premios'],
-  ['5.1 Experiencia profesional'],
-  ['6.1 PDI universidad pública','6.2 Grado de doctor','6.3 Acreditación PAD o superior'],
-];
+let data = {
+  '1.1_grado': 0, '1.1_master': 0, '1.1_tesis': 0, '1.1_adics': 0, '1.1_idiomas': 0,
+  '1.2_predoc_meses': 0, '1.2_postdoc_meses': 0, '1.2_postdoc_tipo': 'cierva', '1.2_otros': 0,
+  '2.1_doc': 0, '2.2_cursimp': 0, '2.2_rea': 0, '2.2_noofic': 0,
+  '2.3_calidad': 0, '2.4_innov': 0, '2.5_tutor': 0,
+  '3.1_proyectos': 0, '3.2_catA': 0, '3.2_catB': 0, '3.2_catC': 0, '3.2_catD': 0,
+  '3.3_intlInv': 0, '3.3_intlOral': 0, '3.3_intlPost': 0, '3.3_natInv': 0, '3.3_natOral': 0, '3.3_natPost': 0,
+  '3.4_sexenios': 0, '3.5_estancias': 0,
+  '4.1_direccion': 0, '4.2_tesis': 0, '4.3_gestion': 0, '4.4_organos': 0, '4.5_premios': 0,
+  '5.1_expprof': 0,
+  '6.1_pdi': 0, '6.2_doctor': 0, '6.3_acred': 0
+};
 
-let vals = {};
+function getFig() { return document.getElementById('figura').value; }
 
-function initVals(){
-  FIELDS.forEach(f => {
-    if(f.type==='publics') vals[f.id]={catA:0,catB:0,catC:0,catD:0};
-    else if(f.type==='congresos') vals[f.id]={intlInv:0,intlOral:0,intlPost:0,natInv:0,natOral:0,natPost:0};
-    else if(f.type==='predoc') vals[f.id]={meses:0};
-    else if(f.type==='postdoc') vals[f.id]={meses:0,tipo:'cierva'};
-    else vals[f.id] = 0;
-  });
-}
+function getMax(id) { return MAXIMOS[id]?.[getFig()] ?? 0; }
 
-function getFig(){return document.getElementById('figura').value;}
-
-function getMax(id){
-  const f = getFig();
-  return MAXIMOS[id]?.[f] ?? 0;
-}
-
-function calcPredoc(meses){
-  const f = getFig();
-  const maxTotal = getMax('1.2_predoc');
-  const pts = (meses / 48) * maxTotal;
-  return Math.min(pts, maxTotal);
-}
-
-function calcPostdoc(meses, tipo){
-  const f = getFig();
-  const maxTotal = getMax('1.2_postdoc');
-  const ratios = {'galindo': 1.0, 'cierva': 0.667, 'otros': 0.333};
-  const ratio = ratios[tipo] || 0.333;
-  const pts = (meses / 24) * ratio * maxTotal;
-  return Math.min(pts, maxTotal);
-}
-
-function calcPublics(data){
-  const f = getFig();
-  const maxTotal = getMax('3.2_publics');
-  let rates = {A:0.4, B:0.2, C:0.1, D:0.05};
-  if(f==='PAD'||f==='ASO'||f==='SUS') rates={A:0.4,B:0.2,C:0.1,D:0.05};
-  else if(f==='PPL'||f==='VIN') rates={A:0.2,B:0.1,C:0.05,D:0.025};
-  else if(f==='CU'||f==='CU_VIN') rates={A:0.1,B:0.05,C:0.025,D:0.0125};
+function calc(id) {
+  const fig = getFig();
+  const val = data[id];
   
-  let total = (data.catA||0)*rates.A + (data.catB||0)*rates.B + (data.catC||0)*rates.C + (data.catD||0)*rates.D;
-  const maxCandD = (f==='ASO'||f==='PAD'||f==='SUS')?1.35:((f==='PPL'||f==='VIN')?2.35:2);
-  const cdTotal = ((data.catC||0)*rates.C + (data.catD||0)*rates.D);
-  if(cdTotal > maxCandD) total = (data.catA||0)*rates.A + (data.catB||0)*rates.B + maxCandD;
-  return Math.min(total, maxTotal);
-}
-
-function calcCongresos(data){
-  const maxTotal = getMax('3.3_congresos');
-  let total = (data.intlInv||0)*0.2 + (data.intlOral||0)*0.1 + (data.intlPost||0)*0.05 + (data.natInv||0)*0.1 + (data.natOral||0)*0.05 + (data.natPost||0)*0.02;
-  return Math.min(total, maxTotal);
-}
-
-function calcField(id, val){
-  const max = getMax(id);
-  if(!val && val!==0) return 0;
+  // Formación
+  if (id === '1.1_grado') return Math.min(val, getMax(id));
+  if (id === '1.1_master') return Math.min(val, getMax(id));
+  if (id === '1.1_tesis') return Math.min(val, getMax(id));
+  if (id === '1.1_adics') return Math.min(val, getMax(id));
+  if (id === '1.1_idiomas') return Math.min(val, getMax(id));
   
-  if(id==='1.2_predoc') return calcPredoc(val.meses || 0);
-  if(id==='1.2_postdoc') return calcPostdoc(val.meses || 0, val.tipo || 'cierva');
-  if(id==='3.2_publics') return calcPublics(val);
-  if(id==='3.3_congresos') return calcCongresos(val);
+  // Contratos predoctorales
+  if (id === '1.2_predoc') {
+    const meses = data['1.2_predoc_meses'] || 0;
+    const max = getMax(id);
+    return Math.min((meses / 48) * max, max);
+  }
   
-  if(id==='2.1_doc'){
-    const f=getFig();
-    let pts = val * 1;
-    if(f==='CU'||f==='CU_VIN') pts = val * 0.5;
+  // Contratos postdoctorales
+  if (id === '1.2_postdoc') {
+    const meses = data['1.2_postdoc_meses'] || 0;
+    const tipo = data['1.2_postdoc_tipo'] || 'cierva';
+    const ratios = {'galindo': 1.0, 'cierva': 0.667, 'otros': 0.333};
+    const ratio = ratios[tipo] || 0.333;
+    const max = getMax(id);
+    return Math.min((meses / 24) * ratio * max, max);
+  }
+  
+  if (id === '1.2_otros') return Math.min(val, getMax(id));
+  
+  // Docencia
+  if (id === '2.1_doc') {
+    const max = getMax(id);
+    const pts = (fig === 'CU' || fig === 'CU_VIN') ? val * 0.5 : val * 1;
     return Math.min(pts, max);
   }
-  if(id==='3.4_sexenios'){
-    const f=getFig();
-    const per = (f==='PPL'||f==='VIN')?0.5:0.25;
-    return Math.min(val * per, max);
-  }
-  if(id==='3.5_estancias'){
-    const f=getFig();
-    const per = (f==='PAD'||f==='SUS')?0.2:0.1;
-    return Math.min(val * per, max);
-  }
-  if(id==='6.1_pdi') return Math.min(val * 1, max);
-  if(id==='6.2_doctor') return (val >= 1) ? max : 0;
-  if(id==='6.3_acred') return (val >= 1) ? 6 : 0;
-  return Math.min(val, max);
-}
-
-function recalc(){
-  const secTotals = SECS.map((_,i)=>{
-    return FIELDS.filter(f=>f.sec===i).reduce((a,f)=>a+calcField(f.id, vals[f.id]), 0);
-  });
-  const total = secTotals.reduce((a,b)=>a+b,0);
+  if (id === '2.2_cursimp') return Math.min(val, getMax(id));
+  if (id === '2.2_rea') return Math.min(val, getMax(id));
+  if (id === '2.2_noofic') return Math.min(val, getMax(id));
+  if (id === '2.3_calidad') return Math.min(val, getMax(id));
+  if (id === '2.4_innov') return Math.min(val, getMax(id));
+  if (id === '2.5_tutor') return Math.min(val, getMax(id));
   
-  const summaryEl = document.getElementById('summary');
-  const secNames = ['Formación','Docencia','Investigación','Liderazgo','Act. Prof.','Méritos pref.'];
-  let sumHTML = '';
-  secTotals.forEach((v,i)=>{
-    const mx = FIELDS.filter(f=>f.sec===i).reduce((a,f)=>a+getMax(f.id),0);
-    sumHTML += `<div class="scard"><div class="slabel">${secNames[i]}</div><div class="sval">${v.toFixed(2)}</div><div class="smax">máx ${mx.toFixed(2)}</div><div class="progress-bar"><div class="progress-fill" style="width:${mx>0?Math.min(100,(v/mx)*100):0}%"></div></div></div>`;
-  });
-  sumHTML += `<div class="scard total"><div class="slabel">Total estimado</div><div class="sval">${total.toFixed(2)}</div><div class="smax">orientativo</div></div>`;
-  summaryEl.innerHTML = sumHTML;
+  // Investigación - Publicaciones
+  if (id === '3.2_publics') {
+    const catA = data['3.2_catA'] || 0;
+    const catB = data['3.2_catB'] || 0;
+    const catC = data['3.2_catC'] || 0;
+    const catD = data['3.2_catD'] || 0;
+    let rates = {A:0.4, B:0.2, C:0.1, D:0.05};
+    if (fig === 'PPL' || fig === 'VIN') rates = {A:0.2, B:0.1, C:0.05, D:0.025};
+    if (fig === 'CU' || fig === 'CU_VIN') rates = {A:0.1, B:0.05, C:0.025, D:0.0125};
+    let total = catA * rates.A + catB * rates.B + catC * rates.C + catD * rates.D;
+    const cdMax = (fig === 'ASO' || fig === 'PAD' || fig === 'SUS') ? 1.35 : 2.35;
+    const cd = catC * rates.C + catD * rates.D;
+    if (cd > cdMax) total = catA * rates.A + catB * rates.B + cdMax;
+    const max = getMax(id);
+    return Math.min(total, max);
+  }
+  
+  // Congresos
+  if (id === '3.3_congresos') {
+    const total = (data['3.3_intlInv']||0)*0.2 + (data['3.3_intlOral']||0)*0.1 + (data['3.3_intlPost']||0)*0.05 
+                + (data['3.3_natInv']||0)*0.1 + (data['3.3_natOral']||0)*0.05 + (data['3.3_natPost']||0)*0.02;
+    const max = getMax(id);
+    return Math.min(total, max);
+  }
+  
+  if (id === '3.1_proyectos') return Math.min(val, getMax(id));
+  if (id === '3.4_sexenios') {
+    const max = getMax(id);
+    const pts = (fig === 'PPL' || fig === 'VIN') ? val * 0.5 : val * 0.25;
+    return Math.min(pts, max);
+  }
+  if (id === '3.5_estancias') {
+    const max = getMax(id);
+    const pts = (fig === 'PAD' || fig === 'SUS') ? val * 0.2 : val * 0.1;
+    return Math.min(pts, max);
+  }
+  
+  // Liderazgo
+  if (id === '4.1_direccion') return Math.min(val, getMax(id));
+  if (id === '4.2_tesis') return Math.min(val, getMax(id));
+  if (id === '4.3_gestion') return Math.min(val, getMax(id));
+  if (id === '4.4_organos') return Math.min(val, getMax(id));
+  if (id === '4.5_premios') return Math.min(val, getMax(id));
+  
+  // Actividad profesional
+  if (id === '5.1_expprof') return Math.min(val, getMax(id));
+  
+  // Méritos preferentes
+  if (id === '6.1_pdi') return Math.min(val, getMax(id));
+  if (id === '6.2_doctor') return val >= 1 ? getMax(id) : 0;
+  if (id === '6.3_acred') return val >= 1 ? 6 : 0;
+  
+  return 0;
+}
 
-  SECS.forEach((_,si)=>{
-    const badge = document.getElementById(`badge-${si}`);
-    if(badge) badge.textContent = secTotals[si].toFixed(2)+' pts';
-    
-    FIELDS.filter(f=>f.sec===si).forEach(f=>{
-      const maxEl = document.getElementById(`maxlabel-${f.id}`);
-      if(maxEl) maxEl.textContent = `máx ${getMax(f.id).toFixed(2)}`;
-    });
+function updateAll() {
+  // Actualizar summary
+  const sec0 = ['1.1_grado','1.1_master','1.1_tesis','1.1_adics','1.1_idiomas','1.2_predoc','1.2_postdoc','1.2_otros'];
+  const sec1 = ['2.1_doc','2.2_cursimp','2.2_rea','2.2_noofic','2.3_calidad','2.4_innov','2.5_tutor'];
+  const sec2 = ['3.1_proyectos','3.2_publics','3.3_congresos','3.4_sexenios','3.5_estancias'];
+  const sec3 = ['4.1_direccion','4.2_tesis','4.3_gestion','4.4_organos','4.5_premios'];
+  const sec4 = ['5.1_expprof'];
+  const sec5 = ['6.1_pdi','6.2_doctor','6.3_acred'];
+  
+  const secs = [sec0, sec1, sec2, sec3, sec4, sec5];
+  const totals = secs.map(ids => ids.reduce((a, id) => a + calc(id), 0));
+  const total = totals.reduce((a,b) => a+b, 0);
+  
+  let html = '';
+  const names = ['Formación','Docencia','Investigación','Liderazgo','Act. Prof.','Méritos'];
+  totals.forEach((v, i) => {
+    const mx = secs[i].reduce((a, id) => a + getMax(id), 0);
+    html += `<div class="scard"><div class="slabel">${names[i]}</div><div class="sval">${v.toFixed(2)}</div><div class="smax">máx ${mx.toFixed(2)}</div></div>`;
+  });
+  html += `<div class="scard total"><div class="slabel">Total</div><div class="sval">${total.toFixed(2)}</div></div>`;
+  document.getElementById('summary').innerHTML = html;
+  
+  // Actualizar badges
+  ['sec0','sec1','sec2','sec3','sec4','sec5'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = totals[i].toFixed(2) + ' pts';
   });
 }
 
-function buildSections(){
+function createApp() {
   let html = '';
-  SECS.forEach((sec,si)=>{
+  SECS.forEach((sec, si) => {
     html += `<div class="section">
       <div class="sec-header" onclick="toggleSec(${si})">
         <span class="sec-title">${sec}</span>
-        <span class="sec-score">
-          <span class="sec-badge" id="badge-${si}">0.00 pts</span>
-          <span class="sec-chevron" id="chev-${si}">▼</span>
-        </span>
+        <span class="sec-badge" id="sec${si}">0.00 pts</span>
       </div>
       <div class="sec-body" id="secbody-${si}">`;
     
-    SUBS[si].forEach((subname,subi)=>{
-      const subFields = FIELDS.filter(f=>f.sec===si&&f.sub===subi);
-      if(!subFields.length) return;
-      html += `<div class="subsec"><div class="subsec-title">${subname}</div>`;
-      subFields.forEach(f=>{
-        if(f.type==='simple'){
-          html += `<div class="field">
-            <div><div>${f.label}</div><div class="hint">${f.hint}</div></div>
-            <div><input type="number" id="inp-${f.id}" min="0" step="0.1" value="0" onchange="vals['${f.id}']=parseFloat(this.value)||0; recalc();">
-            <span id="maxlabel-${f.id}" style="font-size:11px;color:var(--color-text-tertiary);display:block;margin-top:2px">máx ${getMax(f.id).toFixed(2)}</span></div></div>`;
-        } else if(f.type==='predoc'){
-          html += `<div class="field">
-            <div><div>${f.label}</div><div class="hint">${f.hint}</div></div>
-            <div style="width:100%">
-              <div class="field-group-title">Meses</div>
-              <div class="compound-field">
-                <label>Meses:</label>
-                <input type="number" min="0" step="1" value="0" onchange="vals['${f.id}'].meses=parseFloat(this.value)||0; recalc();">
-              </div>
-              <span id="maxlabel-${f.id}" style="font-size:11px;color:var(--color-text-tertiary);display:block;margin-top:4px">máx ${getMax(f.id).toFixed(2)}</span>
-            </div></div>`;
-        } else if(f.type==='postdoc'){
-          html += `<div class="field">
-            <div><div>${f.label}</div><div class="hint">${f.hint}</div></div>
-            <div style="width:100%">
-              <div class="field-group-title">Postdoctorales</div>
-              <div class="compound-field">
-                <label>Meses:</label>
-                <input type="number" min="0" step="1" value="0" onchange="vals['${f.id}'].meses=parseFloat(this.value)||0; recalc();">
-                <label>Tipo:</label>
-                <select onchange="vals['${f.id}'].tipo=this.value; recalc();">
-                  <option value="galindo">Beatriz Galindo/Ramón y Cajal</option>
-                  <option value="cierva" selected>Juan de la Cierva/Marie Curie</option>
-                  <option value="otros">Otros postdoctorales</option>
-                </select>
-              </div>
-              <span id="maxlabel-${f.id}" style="font-size:11px;color:var(--color-text-tertiary);display:block;margin-top:4px">máx ${getMax(f.id).toFixed(2)}</span>
-            </div></div>`;
-        } else if(f.type==='publics'){
-          html += `<div class="field">
-            <div><div>${f.label}</div><div class="hint">${f.hint}</div></div>
-            <div style="width:100%">
-              <div class="field-group-title">Publicaciones</div>
-              <div class="compound-field">
-                <label>Cat. A:</label><input type="number" min="0" step="1" value="0" onchange="vals['${f.id}'].catA=parseInt(this.value)||0; recalc();">
-                <label>Cat. B:</label><input type="number" min="0" step="1" value="0" onchange="vals['${f.id}'].catB=parseInt(this.value)||0; recalc();">
-                <label>Cat. C:</label><input type="number" min="0" step="1" value="0" onchange="vals['${f.id}'].catC=parseInt(this.value)||0; recalc();">
-                <label>Cat. D:</label><input type="number" min="0" step="1" value="0" onchange="vals['${f.id}'].catD=parseInt(this.value)||0; recalc();">
-              </div>
-              <span id="maxlabel-${f.id}" style="font-size:11px;color:var(--color-text-tertiary);display:block;margin-top:4px">máx ${getMax(f.id).toFixed(2)}</span>
-            </div></div>`;
-        } else if(f.type==='congresos'){
-          html += `<div class="field">
-            <div><div>${f.label}</div><div class="hint">${f.hint}</div></div>
-            <div style="width:100%">
-              <div class="field-group-title">Internacionales</div>
-              <div class="compound-field">
-                <label>Invit:</label><input type="number" min="0" step="1" value="0" onchange="vals['${f.id}'].intlInv=parseInt(this.value)||0; recalc();">
-                <label>Orales:</label><input type="number" min="0" step="1" value="0" onchange="vals['${f.id}'].intlOral=parseInt(this.value)||0; recalc();">
-                <label>Pósters:</label><input type="number" min="0" step="1" value="0" onchange="vals['${f.id}'].intlPost=parseInt(this.value)||0; recalc();">
-              </div>
-              <div class="field-group-title" style="margin-top:8px">Nacionales</div>
-              <div class="compound-field">
-                <label>Invit:</label><input type="number" min="0" step="1" value="0" onchange="vals['${f.id}'].natInv=parseInt(this.value)||0; recalc();">
-                <label>Orales:</label><input type="number" min="0" step="1" value="0" onchange="vals['${f.id}'].natOral=parseInt(this.value)||0; recalc();">
-                <label>Pósters:</label><input type="number" min="0" step="1" value="0" onchange="vals['${f.id}'].natPost=parseInt(this.value)||0; recalc();">
-              </div>
-              <span id="maxlabel-${f.id}" style="font-size:11px;color:var(--color-text-tertiary);display:block;margin-top:4px">máx ${getMax(f.id).toFixed(2)}</span>
-            </div></div>`;
-        }
-      });
-      html += `</div>`;
-    });
+    if (si === 0) {
+      html += `<div class="field"><label>Nota expediente grado (1-4)</label><input type="number" min="0" max="4" step="0.1" value="0" onchange="data['1.1_grado']=parseFloat(this.value)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>Puntuación expediente máster</label><input type="number" min="0" step="0.1" value="0" onchange="data['1.1_master']=parseFloat(this.value)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>Calificación especial tesis</label><input type="number" min="0" step="0.1" value="0" onchange="data['1.1_tesis']=parseFloat(this.value)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>Títulos adicionales</label><input type="number" min="0" step="0.1" value="0" onchange="data['1.1_adics']=parseFloat(this.value)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>Certificaciones idiomas (C1+)</label><input type="number" min="0" step="0.1" value="0" onchange="data['1.1_idiomas']=parseFloat(this.value)||0; updateAll();"></div>`;
+      html += `<div class="subsec-title">Contratos predoctorales</div>`;
+      html += `<div class="grid2"><label>Meses:</label><input type="number" min="0" step="1" value="0" onchange="data['1.2_predoc_meses']=parseFloat(this.value)||0; updateAll();"></div>`;
+      html += `<div class="subsec-title">Contratos postdoctorales</div>`;
+      html += `<div class="grid2"><label>Meses:</label><input type="number" min="0" step="1" value="0" onchange="data['1.2_postdoc_meses']=parseFloat(this.value)||0; updateAll();"></div>`;
+      html += `<div class="grid2"><label>Tipo:</label><select onchange="data['1.2_postdoc_tipo']=this.value; updateAll();"><option value="galindo">Beatriz Galindo</option><option value="cierva" selected>Juan de la Cierva</option><option value="otros">Otros</option></select></div>`;
+      html += `<div class="field"><label>Otros contratos investigación</label><input type="number" min="0" step="0.1" value="0" onchange="data['1.2_otros']=parseFloat(this.value)||0; updateAll();"></div>`;
+    } else if (si === 1) {
+      html += `<div class="field"><label>Años docencia titulaciones oficiales</label><input type="number" min="0" step="0.1" value="0" onchange="data['2.1_doc']=parseFloat(this.value)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>Horas formación docente impartida</label><input type="number" min="0" step="1" value="0" onchange="data['2.2_cursimp']=parseFloat(this.value/10)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>Recursos educativos abiertos</label><input type="number" min="0" step="0.1" value="0" onchange="data['2.2_rea']=parseFloat(this.value)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>Horas docencia no oficial</label><input type="number" min="0" step="1" value="0" onchange="data['2.2_noofic']=parseFloat(this.value/100)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>Evaluaciones Docentia</label><input type="number" min="0" step="0.1" value="0" onchange="data['2.3_calidad']=parseFloat(this.value)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>Proyectos innovación docente</label><input type="number" min="0" step="0.1" value="0" onchange="data['2.4_innov']=parseFloat(this.value)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>Tutorización TFG/TFM/PIF</label><input type="number" min="0" step="0.1" value="0" onchange="data['2.5_tutor']=parseFloat(this.value)||0; updateAll();"></div>`;
+    } else if (si === 2) {
+      html += `<div class="field"><label>Proyectos competitivos</label><input type="number" min="0" step="0.1" value="0" onchange="data['3.1_proyectos']=parseFloat(this.value)||0; updateAll();"></div>`;
+      html += `<div class="subsec-title">Publicaciones científicas</div>`;
+      html += `<div class="grid2"><label>Cat A:</label><input type="number" min="0" step="1" value="0" onchange="data['3.2_catA']=parseInt(this.value)||0; updateAll();"></div>`;
+      html += `<div class="grid2"><label>Cat B:</label><input type="number" min="0" step="1" value="0" onchange="data['3.2_catB']=parseInt(this.value)||0; updateAll();"></div>`;
+      html += `<div class="grid2"><label>Cat C:</label><input type="number" min="0" step="1" value="0" onchange="data['3.2_catC']=parseInt(this.value)||0; updateAll();"></div>`;
+      html += `<div class="grid2"><label>Cat D:</label><input type="number" min="0" step="1" value="0" onchange="data['3.2_catD']=parseInt(this.value)||0; updateAll();"></div>`;
+      html += `<div class="subsec-title">Congresos</div>`;
+      html += `<div class="grid2"><label>Intl Invit:</label><input type="number" min="0" step="1" value="0" onchange="data['3.3_intlInv']=parseInt(this.value)||0; updateAll();"></div>`;
+      html += `<div class="grid2"><label>Intl Oral:</label><input type="number" min="0" step="1" value="0" onchange="data['3.3_intlOral']=parseInt(this.value)||0; updateAll();"></div>`;
+      html += `<div class="grid2"><label>Intl Póster:</label><input type="number" min="0" step="1" value="0" onchange="data['3.3_intlPost']=parseInt(this.value)||0; updateAll();"></div>`;
+      html += `<div class="grid2"><label>Nac Invit:</label><input type="number" min="0" step="1" value="0" onchange="data['3.3_natInv']=parseInt(this.value)||0; updateAll();"></div>`;
+      html += `<div class="grid2"><label>Nac Oral:</label><input type="number" min="0" step="1" value="0" onchange="data['3.3_natOral']=parseInt(this.value)||0; updateAll();"></div>`;
+      html += `<div class="grid2"><label>Nac Póster:</label><input type="number" min="0" step="1" value="0" onchange="data['3.3_natPost']=parseInt(this.value)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>Número de sexenios</label><input type="number" min="0" step="1" value="0" onchange="data['3.4_sexenios']=parseInt(this.value)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>Meses estancias investigación</label><input type="number" min="0" step="1" value="0" onchange="data['3.5_estancias']=parseInt(this.value)||0; updateAll();"></div>`;
+    } else if (si === 3) {
+      html += `<div class="field"><label>Dirección proyectos/equipos</label><input type="number" min="0" step="0.1" value="0" onchange="data['4.1_direccion']=parseFloat(this.value)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>Tesis doctorales dirigidas</label><input type="number" min="0" step="0.1" value="0" onchange="data['4.2_tesis']=parseFloat(this.value)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>Cargos dirección gestión</label><input type="number" min="0" step="0.1" value="0" onchange="data['4.3_gestion']=parseFloat(this.value)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>Órganos científicos comités</label><input type="number" min="0" step="0.1" value="0" onchange="data['4.4_organos']=parseFloat(this.value)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>Premios reconocimientos</label><input type="number" min="0" step="0.1" value="0" onchange="data['4.5_premios']=parseFloat(this.value)||0; updateAll();"></div>`;
+    } else if (si === 4) {
+      html += `<div class="field"><label>Años experiencia profesional</label><input type="number" min="0" step="0.1" value="0" onchange="data['5.1_expprof']=parseFloat(this.value)||0; updateAll();"></div>`;
+    } else if (si === 5) {
+      html += `<div class="field"><label>Años PDI universidad pública</label><input type="number" min="0" step="0.1" value="0" onchange="data['6.1_pdi']=parseFloat(this.value)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>¿Grado de doctor? (1=sí, 0=no)</label><input type="number" min="0" max="1" step="1" value="0" onchange="data['6.2_doctor']=parseInt(this.value)||0; updateAll();"></div>`;
+      html += `<div class="field"><label>¿Acreditación PAD+? (1=sí, 0=no)</label><input type="number" min="0" max="1" step="1" value="0" onchange="data['6.3_acred']=parseInt(this.value)||0; updateAll();"></div>`;
+    }
+    
     html += `</div></div>`;
   });
   document.getElementById('sections').innerHTML = html;
 }
 
-function toggleSec(si){
-  const body = document.getElementById(`secbody-${si}`);
-  const chev = document.getElementById(`chev-${si}`);
+function toggleSec(i) {
+  const body = document.getElementById(`secbody-${i}`);
   body.classList.toggle('open');
-  chev.classList.toggle('open');
 }
 
-function resetAll(){
-  initVals();
-  document.querySelectorAll('input[type=number]').forEach(el=>el.value=0);
-  document.querySelectorAll('select').forEach(el=>el.value=el.querySelector('option').value);
-  recalc();
+function resetAll() {
+  data = {
+    '1.1_grado': 0, '1.1_master': 0, '1.1_tesis': 0, '1.1_adics': 0, '1.1_idiomas': 0,
+    '1.2_predoc_meses': 0, '1.2_postdoc_meses': 0, '1.2_postdoc_tipo': 'cierva', '1.2_otros': 0,
+    '2.1_doc': 0, '2.2_cursimp': 0, '2.2_rea': 0, '2.2_noofic': 0,
+    '2.3_calidad': 0, '2.4_innov': 0, '2.5_tutor': 0,
+    '3.1_proyectos': 0, '3.2_catA': 0, '3.2_catB': 0, '3.2_catC': 0, '3.2_catD': 0,
+    '3.3_intlInv': 0, '3.3_intlOral': 0, '3.3_intlPost': 0, '3.3_natInv': 0, '3.3_natOral': 0, '3.3_natPost': 0,
+    '3.4_sexenios': 0, '3.5_estancias': 0,
+    '4.1_direccion': 0, '4.2_tesis': 0, '4.3_gestion': 0, '4.4_organos': 0, '4.5_premios': 0,
+    '5.1_expprof': 0,
+    '6.1_pdi': 0, '6.2_doctor': 0, '6.3_acred': 0
+  };
+  document.querySelectorAll('input[type=number]').forEach(el => el.value = 0);
+  document.querySelectorAll('select').forEach(el => el.value = el.querySelector('option').value);
+  updateAll();
 }
 
-initVals();
-buildSections();
-recalc();
+createApp();
+updateAll();
 </script>
 </body>
 </html>
