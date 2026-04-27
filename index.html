@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora del Baremo USAL</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    :root {
+      --color-bg-primary: #ffffff;
+      --color-bg-secondary: #f5f5f5;
+      --color-bg-tertiary: #efefef;
+      --color-text-primary: #1a1a1a;
+      --color-text-secondary: #666666;
+      --color-text-tertiary: #999999;
+      --color-border: #e0e0e0;
+      --color-info: #2196F3;
+      --color-info-bg: #e3f2fd;
+    }
+    
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg-primary: #1e1e1e;
+        --color-bg-secondary: #2d2d2d;
+        --color-bg-tertiary: #3a3a3a;
+        --color-text-primary: #ffffff;
+        --color-text-secondary: #cccccc;
+        --color-text-tertiary: #999999;
+        --color-border: #444444;
+        --color-info: #64B5F6;
+        --color-info-bg: #1565c0;
+      }
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      font-size: 15px;
+      color: var(--color-text-primary);
+      background: var(--color-bg-primary);
+      padding: 0;
+    }
+    
+    .app {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+    
+    .header {
+      margin-bottom: 2rem;
+    }
+    
+    .header h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .header p {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+    }
+    
+    .figura-sel {
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    
+    .figura-sel label {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+    }
+    
+    select {
+      font-size: 13px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg-primary);
+      color: var(--color-text-primary);
+      cursor: pointer;
+    }
+    
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 1.5rem;
+    }
+    
+    .scard {
+      background: var(--color-bg-secondary);
+      border-radius: 8px;
+      padding: 14px 16px;
+      border: 1px solid var(--color-border);
+    }
+    
+    .scard .slabel {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      margin-bottom: 6px;
+    }
+    
+    .scard .sval {
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    .scard .smax {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      margin-top: 4px;
+    }
+    
+    .scard.total {
+      background: var(--color-info-bg);
+      border: 1px solid var(--color-info);
+    }
+    
+    .scard.total .sval {
+      color: var(--color-info);
+    }
+    
+    .sections {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .section {
+      background: var(--color-bg-primary);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    
+    .sec-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      cursor: pointer;
+      user-select: none;
+      background: var(--color-bg-secondary);
+      transition: background 0.2s;
+    }
+    
+    .sec-header:hover {
+      background: var(--color-bg-tertiary);
+    }
+    
+    .sec-title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    .sec-score {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .sec-badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: var(--color-info-bg);
+      color: var(--color-info);
+    }
+    
+    .sec-chevron {
+      font-size: 12px;
+      color: var(--color-text-tertiary);
+      transition: transform 0.2s;
+    }
+    
+    .sec-chevron.open {
+      transform: rotate(180deg);
+    }
+    
+    .sec-body {
+      padding: 0 16px;
+      display: none;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease-out;
+    }
+    
+    .sec-body.open {
+      display: block;
+      padding: 12px 16px;
+      max-height: 5000px;
+    }
+    
+    .subsec {
+      margin-bottom: 16px;
+    }
+    
+    .subsec-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--color-border);
+    }
+    
+    .field {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    
+    .field label {
+      font-size: 13px;
+      color: var(--color-text-primary);
+    }
+    
+    .field .hint {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      margin-top: 2px;
+    }
+    
+    .field input[type=number] {
+      width: 90px;
+      font-size: 13px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg-primary);
+      color: var(--color-text-primary);
+      text-align: right;
+    }
+    
+    .field input[type=number]:focus {
+      outline: none;
+      border-color: var(--color-info);
+    }
+    
+    .subscore {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      text-align: right;
+      margin-top: 6px;
+      margin-bottom: 10px;
+    }
+    
+    .subscore span {
+      font-weight: 600;
+      color: var(--color-info);
+    }
+    
+    .progress-bar {
+      height: 4px;
+      border-radius: 2px;
+      background: var(--color-border);
+      margin-top: 6px;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: var(--color-info);
+      transition: width 0.3s;
+    }
+    
+    .reset-btn {
+      font-size: 13px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: 1px solid var(--color-border);
+      background: transparent;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .reset-btn:hover {
+      background: var(--color-bg-secondary);
+    }
+    
+    .compound-field {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 8px;
+      padding: 8px;
+      background: var(--color-bg-tertiary);
+      border-radius: 6px;
+    }
+    
+    .compound-field label {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+    }
+    
+    .compound-field input, .compound-field select {
+      width: 100%;
+      font-size: 13px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg-primary);
+      color: var(--color-text-primary);
+    }
+    
+    .field-group-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-top: 6px;
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>Calculadora del baremo USAL</h1>
+    <p>Consejo de Gobierno de 25 de julio de 2024 — estimación orientativa</p>
+  </div>
+
+  <div class="figura-sel">
+    <label>Tipo de plaza:</label>
+    <select id="figura" onchange="recalc()">
+      <option value="ASO">Asociado (ASO)</option>
+      <option value="PAD">Profesor Ayudante Doctor (PAD)</option>
+      <option value="PPL" selected>PPL / Titular de Universidad (TU)</option>
+      <option value="VIN">PPL/TU Vinculado</option>
+      <option value="CU">Catedrático de Universidad (CU)</option>
+      <option value="CU_VIN">CU Vinculado</option>
+      <option value="SUS">Profesor Sustituto (SUS)</option>
+    </select>
+    <button class="reset-btn" onclick="resetAll()">Reiniciar</button>
+  </div>
+
+  <div class="summary" id="summary"></div>
+  <div class="sections" id="sections"></div>
+</div>
+
+<script>
+const MAXIMOS = {
+  "1.1_grado":     {ASO:4,PAD:4,PPL:2,VIN:1,CU:1,CU_VIN:1,SUS:4},
+  "1.1_master":    {ASO:1,PAD:1,PPL:0.5,VIN:1,CU:0.2,CU_VIN:0.2,SUS:1},
+  "1.1_tesis":     {ASO:0.1,PAD:0.2,PPL:0.1,VIN:0.1,CU:0.1,CU_VIN:0.1,SUS:0.2},
+  "1.1_adics":     {ASO:0.5,PAD:0.7,PPL:0.2,VIN:0.2,CU:0.1,CU_VIN:0.1,SUS:1},
+  "1.1_idiomas":   {ASO:0.4,PAD:0.6,PPL:0.2,VIN:0.2,CU:0.1,CU_VIN:0.1,SUS:0.8},
+  "1.2_predoc_meses":  {ASO:0.5,PAD:3,PPL:1,VIN:0.1,CU:0.7,CU_VIN:0.1,SUS:2},
+  "1.2_postdoc_meses": {ASO:0.3,PAD:3,PPL:1.5,VIN:0.2,CU:0.7,CU_VIN:0.2,SUS:1.5},
+  "1.2_otros":     {ASO:0.2,PAD:0.5,PPL:0.5,VIN:0.2,CU:0.1,CU_VIN:0.2,SUS:0.5},
+  "2.1_doc":       {ASO:5,PAD:6,PPL:7,VIN:6,CU:6,CU_VIN:5,SUS:5},
+  "2.2_cursimp":   {ASO:0.5,PAD:0.8,PPL:0.5,VIN:0.5,CU:0.5,CU_VIN:0.5,SUS:0.5},
+  "2.2_rea":       {ASO:0.2,PAD:0.3,PPL:0.2,VIN:0.2,CU:0.2,CU_VIN:0.2,SUS:0.3},
+  "2.2_noofic":    {ASO:0.3,PAD:0.4,PPL:0.3,VIN:0.3,CU:0.3,CU_VIN:0.3,SUS:0.2},
+  "2.3_calidad":   {ASO:0.2,PAD:1,PPL:2,VIN:1,CU:1.5,CU_VIN:1,SUS:1},
+  "2.4_innov":     {ASO:0.4,PAD:1.5,PPL:2,VIN:1,CU:1.5,CU_VIN:1,SUS:1},
+  "2.5_tutor":     {ASO:0.4,PAD:1,PPL:1,VIN:1,CU:1,CU_VIN:1,SUS:1},
+  "3.1_proyectos": {ASO:1,PAD:1.5,PPL:2,VIN:2,CU:1.5,CU_VIN:2,SUS:1},
+  "3.2_publics_total":   {ASO:4,PAD:6,PPL:7,VIN:6,CU:6,CU_VIN:5,SUS:5},
+  "3.3_congresos_total": {ASO:1.5,PAD:1.25,PPL:1.5,VIN:1,CU:1,CU_VIN:1,SUS:1},
+  "3.4_sexenios":  {ASO:0,PAD:0.25,PPL:1,VIN:0,CU:1,CU_VIN:0.5,SUS:0},
+  "3.5_estancias": {ASO:0.5,PAD:2,PPL:1.5,VIN:1,CU:1.5,CU_VIN:0.5,SUS:2},
+  "4.1_direccion": {ASO:0.2,PAD:0.2,PPL:1,VIN:0.5,CU:3,CU_VIN:2,SUS:0.2},
+  "4.2_tesis":     {ASO:0.1,PAD:0.1,PPL:0.5,VIN:0.5,CU:2,CU_VIN:2,SUS:0.1},
+  "4.3_gestion":   {ASO:0.1,PAD:0.1,PPL:1,VIN:0.5,CU:3,CU_VIN:2,SUS:0.1},
+  "4.4_organos":   {ASO:0.1,PAD:0.1,PPL:1,VIN:1,CU:2,CU_VIN:2,SUS:0.1},
+  "4.5_premios":   {ASO:0.5,PAD:0.5,PPL:0.5,VIN:0.5,CU:1,CU_VIN:1,SUS:0.5},
+  "5.1_expprof":   {ASO:14,PAD:2,PPL:2,VIN:7,CU:2,CU_VIN:6,SUS:4},
+  "6.1_pdi":       {ASO:2,PAD:2,PPL:2,VIN:4,CU:2,CU_VIN:2,SUS:2},
+  "6.2_doctor":    {ASO:2,PAD:0,PPL:0,VIN:0,CU:0,CU_VIN:0,SUS:4},
+  "6.3_acred":     {ASO:6,PAD:6,PPL:6,VIN:6,CU:6,CU_VIN:6,SUS:6},
+};
+
+const FIELDS = [
+  {id:'1.1_grado', label:'Nota media expediente de grado (1-4)', hint:'Escala 1-4. Si es sobre 10, divídela entre 2.5', sec:0, sub:0, type:'simple'},
+  {id:'1.1_master', label:'Puntuación expediente de máster (0-máx)', hint:'Máx con 2 másteres o 1+tesina, ponderado por nota', sec:0, sub:0, type:'simple'},
+  {id:'1.1_tesis', label:'Calificación/mención especial de tesis', hint:'Solo si obtuvo la máxima calificación o mención internacional', sec:0, sub:0, type:'simple'},
+  {id:'1.1_adics', label:'Títulos adicionales (grado/máster/doc)', hint:'0,2 por grado adicional (ASO/PAD), 0,1 por máster oficial', sec:0, sub:0, type:'simple'},
+  {id:'1.1_idiomas', label:'Certificaciones de idiomas (C1 o superior)', hint:'Solo idiomas distintos a la lengua materna', sec:0, sub:0, type:'simple'},
+  {id:'1.2_predoc', label:'Contratos predoctorales (meses)', hint:'El sistema calcula ¼ del máximo por año', sec:0, sub:1, type:'predoc'},
+  {id:'1.2_postdoc', label:'Contratos postdoctorales (meses)', hint:'Se puntúan según tipo. Ramón y Cajal > Juan de la Cierva > otros', sec:0, sub:1, type:'postdoc'},
+  {id:'1.2_otros', label:'Otros contratos de investigación', hint:'0,1 puntos por contrato anual a tiempo completo', sec:0, sub:1, type:'simple'},
+  {id:'2.1_doc', label:'Años de docencia en titulaciones oficiales', hint:'1 punto/año con ≥180h. Menos horas: proporcional', sec:1, sub:0, type:'simple'},
+  {id:'2.2_cursimp', label:'Horas de formación docente impartida', hint:'0,1 puntos cada 10 horas impartidas', sec:1, sub:1, type:'simple'},
+  {id:'2.2_rea', label:'Recursos educativos abiertos elaborados', hint:'Hasta 0,1 puntos por recurso en repositorio reconocido', sec:1, sub:1, type:'simple'},
+  {id:'2.2_noofic', label:'Horas docencia no oficial', hint:'0,1 puntos cada 100 horas en títulos propios/MOOCs', sec:1, sub:1, type:'simple'},
+  {id:'2.3_calidad', label:'Evaluaciones Docentia / encuestas docentes', hint:'Excelente=1pt, Muy Favorable=0,5, Favorable/quinquenio=0,1', sec:1, sub:2, type:'simple'},
+  {id:'2.4_innov', label:'Proyectos y formación innovación docente', hint:'0,1/proyecto; 0,1 cada 50h recibidas; publicaciones y congresos docentes', sec:1, sub:3, type:'simple'},
+  {id:'2.5_tutor', label:'Tutorización TFG/TFM, PIF, prácticas', hint:'0,1 cada 10 TFG/TFM; 0,1 por investigador predoc tutelado', sec:1, sub:4, type:'simple'},
+  {id:'3.1_proyectos', label:'Participación en proyectos competitivos', hint:'Europeo/Internacional=0,5/3años; Nacional=0,3; Regional=0,2', sec:2, sub:0, type:'simple'},
+  {id:'3.2_publics', label:'Publicaciones científicas', hint:'Introducir cantidad por categoría', sec:2, sub:1, type:'publics'},
+  {id:'3.3_congresos', label:'Congresos y comunicaciones', hint:'Contar invitaciones, presentaciones orales y pósteres', sec:2, sub:2, type:'congresos'},
+  {id:'3.4_sexenios', label:'Número de sexenios reconocidos', hint:'0,25 pts/sexenio (0,5 para PPL/TU)', sec:2, sub:3, type:'simple'},
+  {id:'3.5_estancias', label:'Meses de estancias en centros de investigación', hint:'0,1 pts/mes (0,2 para PAD/SUS). Mínimo 1 mes por estancia', sec:2, sub:4, type:'simple'},
+  {id:'4.1_direccion', label:'Dirección de proyectos y equipos', hint:'IP europeo=0,3/3años; nacional=0,2; regional=0,1. Grupos estables hasta 1pt', sec:3, sub:0, type:'simple'},
+  {id:'4.2_tesis', label:'Tesis doctorales dirigidas (finalizadas)', hint:'0,1 pts por tesis. Se reduce en co-dirección', sec:3, sub:1, type:'simple'},
+  {id:'4.3_gestion', label:'Cargos de dirección y gestión', hint:'Rector/Decano/Dir.Dpto=0,2/año; Vicedecano/Coord=0,1/año; otros=0,05/año', sec:3, sub:2, type:'simple'},
+  {id:'4.4_organos', label:'Órganos científicos, comités, evaluación', hint:'Hasta 0,1 pts/año en sociedades/consejos; 0,01 por revisión', sec:3, sub:3, type:'simple'},
+  {id:'4.5_premios', label:'Premios y reconocimientos', hint:'Grado=0,2; Máster=0,1; Doctorado=0,2; premios intl hasta 0,5', sec:3, sub:4, type:'simple'},
+  {id:'5.1_expprof', label:'Años de experiencia profesional relevante', hint:'Máx 1 punto por año de experiencia adecuada al perfil', sec:4, sub:0, type:'simple'},
+  {id:'6.1_pdi', label:'Años como PDI en universidad pública', hint:'1 punto/año a tiempo completo; 0,5 a tiempo parcial', sec:5, sub:0, type:'simple'},
+  {id:'6.2_doctor', label:'¿Posee el grado de doctor? (1=sí, 0=no)', hint:'Solo se valora en figuras donde no es requisito (ASO, SUS)', sec:5, sub:1, type:'simple'},
+  {id:'6.3_acred', label:'¿Tiene acreditación PAD o superior? (1=sí, 0=no)', hint:'Válido para plazas convocadas hasta 12/04/2027. 6 puntos', sec:5, sub:2, type:'simple'},
+];
+
+const SECS = [
+  {title:'I. Formación académica e investigadora'},
+  {title:'II. Docencia'},
+  {title:'III. Investigación'},
+  {title:'IV. Liderazgo'},
+  {title:'V. Actividad profesional'},
+  {title:'VI. Méritos preferentes'},
+];
+
+const SUBS = [
+  ['1.1 Expediente académico','1.2 Contratos de investigación'],
+  ['2.1 Docencia en titulaciones oficiales','2.2 Formación permanente y REA','2.3 Calidad docente','2.4 Innovación docente','2.5 Tutorización'],
+  ['3.1 Proyectos competitivos','3.2 Publicaciones científicas','3.3 Congresos y transferencia','3.4 Sexenios','3.5 Estancias'],
+  ['4.1 Dirección de equipos/proyectos','4.2 Dirección de tesis','4.3 Dirección y gestión','4.4 Órganos científicos','4.5 Premios'],
+  ['5.1 Experiencia profesional'],
+  ['6.1 PDI universidad pública','6.2 Grado de doctor','6.3 Acreditación PAD o superior'],
+];
+
+let vals = {};
+FIELDS.forEach(f => {
+  if(f.type==='publics') vals[f.id]={catA:0,catB:0,catC:0,catD:0};
+  else if(f.type==='congresos') vals[f.id]={intlInv:0,intlOral:0,intlPost:0,natInv:0,natOral:0,natPost:0};
+  else if(f.type==='predoc') vals[f.id]={meses:0,tipo:'nacional'};
+  else if(f.type==='postdoc') vals[f.id]={meses:0,tipo:'otros'};
+  else vals[f.id] = 0;
+});
+
+function getFig(){return document.getElementById('figura').value;}
+
+function getMax(id){
+  const f = getFig();
+  if(id==='3.2_publics_total') return MAXIMOS['3.2_publics_total'][f];
+  if(id==='3.3_congresos_total') return MAXIMOS['3.3_congresos_total'][f];
+  if(id==='1.2_predoc_meses') return MAXIMOS['1.2_predoc_meses'][f];
+  if(id==='1.2_postdoc_meses') return MAXIMOS['1.2_postdoc_meses'][f];
+  return MAXIMOS[id]?.[f] ?? 0;
+}
+
+function calcPredoc(meses){
+  const f = getFig();
+  const maxTotal = getMax('1.2_predoc_meses');
+  const pts = (meses / 48) * maxTotal;
+  return Math.min(pts, maxTotal);
+}
+
+function calcPostdoc(meses, tipo){
+  const f = getFig();
+  const maxTotal = getMax('1.2_postdoc_meses');
+  const ratios = {
+    'galindo': 1.0,
+    'cierva': 0.667,
+    'otros': 0.333,
+  };
+  const ratio = ratios[tipo] || ratios['otros'];
+  const pts = (meses / 24) * ratio * maxTotal;
+  return Math.min(pts, maxTotal);
+}
+
+function calcPublics(data){
+  const f = getFig();
+  const maxTotal = getMax('3.2_publics_total');
+  let rates = {A:0.4, B:0.2, C:0.1, D:0.05};
+  if(f==='PAD'||f==='ASO'||f==='SUS'){
+    rates={A:0.4,B:0.2,C:0.1,D:0.05};
+  } else if(f==='PPL'||f==='VIN'){
+    rates={A:0.2,B:0.1,C:0.05,D:0.025};
+  } else if(f==='CU'||f==='CU_VIN'){
+    rates={A:0.1,B:0.05,C:0.025,D:0.0125};
+  }
+  let total = data.catA*rates.A + data.catB*rates.B + data.catC*rates.C + data.catD*rates.D;
+  const maxCandD = (f==='ASO'||f==='PAD'||f==='SUS')?1.35:((f==='PPL'||f==='VIN')?2.35:((f==='CU'||f==='CU_VIN')?2:0));
+  const cdTotal = (data.catC*rates.C + data.catD*rates.D);
+  if(cdTotal > maxCandD){
+    total = data.catA*rates.A + data.catB*rates.B + maxCandD;
+  }
+  return Math.min(total, maxTotal);
+}
+
+function calcCongresos(data){
+  const f = getFig();
+  const maxTotal = getMax('3.3_congresos_total');
+  let total = 0;
+  total += data.intlInv * 0.2;
+  total += data.intlOral * 0.1;
+  total += data.intlPost * 0.05;
+  total += data.natInv * 0.1;
+  total += data.natOral * 0.05;
+  total += data.natPost * 0.02;
+  return Math.min(total, maxTotal);
+}
+
+function calcField(id, raw){
+  if(id==='1.2_predoc_meses'){
+    return calcPredoc(raw.meses || 0);
+  }
+  if(id==='1.2_postdoc_meses'){
+    return calcPostdoc(raw.meses || 0, raw.tipo || 'otros');
+  }
+  if(id==='3.2_publics_total'){
+    return calcPublics(raw);
+  }
+  if(id==='3.3_congresos_total'){
+    return calcCongresos(raw);
+  }
+  const max = getMax(id);
+  if(id==='2.1_doc'){
+    const f=getFig();
+    let pts = raw * 1;
+    if(f==='CU'||f==='CU_VIN') pts = raw * 0.5;
+    return Math.min(pts, max);
+  }
+  if(id==='3.4_sexenios'){
+    const f=getFig();
+    const per = (f==='PPL'||f==='VIN')?0.5:0.25;
+    return Math.min(raw * per, max);
+  }
+  if(id==='3.5_estancias'){
+    const f=getFig();
+    const per = (f==='PAD'||f==='SUS')?0.2:0.1;
+    return Math.min(raw * per, max);
+  }
+  if(id==='6.1_pdi') return Math.min(raw * 1, max);
+  if(id==='6.2_doctor') return (raw >= 1) ? max : 0;
+  if(id==='6.3_acred') return (raw >= 1) ? 6 : 0;
+  return Math.min(raw, max);
+}
+
+function secMax(secIdx){
+  return FIELDS.filter(f=>f.sec===secIdx).reduce((a,f)=>{
+    if(f.type==='publics') return a+getMax('3.2_publics_total');
+    if(f.type==='congresos') return a+getMax('3.3_congresos_total');
+    if(f.type==='predoc') return a+getMax('1.2_predoc_meses');
+    if(f.type==='postdoc') return a+getMax('1.2_postdoc_meses');
+    return a+getMax(f.id);
+  },0);
+}
+
+function recalc(){
+  const secTotals = SECS.map((_,i)=>{
+    const fields = FIELDS.filter(f=>f.sec===i);
+    return fields.reduce((a,f)=>{
+      if(f.type==='publics') return a+calcField(f.id, vals[f.id]);
+      if(f.type==='congresos') return a+calcField(f.id, vals[f.id]);
+      if(f.type==='predoc') return a+calcField(f.id, vals[f.id]);
+      if(f.type==='postdoc') return a+calcField(f.id, vals[f.id]);
+      return a+calcField(f.id, vals[f.id] || 0);
+    }, 0);
+  });
+  const total = secTotals.reduce((a,b)=>a+b,0);
+  
+  const summaryEl = document.getElementById('summary');
+  const secNames = ['Formación','Docencia','Investigación','Liderazgo','Act. Prof.','Méritos pref.'];
+  let sumHTML = '';
+  secTotals.forEach((v,i)=>{
+    const mx = secMax(i);
+    sumHTML += `<div class="scard"><div class="slabel">${secNames[i]}</div><div class="sval">${v.toFixed(2)}</div><div class="smax">máx ${mx.toFixed(2)}</div><div class="progress-bar"><div class="progress-fill" style="width:${mx>0?Math.min(100,(v/mx)*100).toFixed(1):0}%"></div></div></div>`;
+  });
+  sumHTML += `<div class="scard total"><div class="slabel">Total estimado</div><div class="sval">${total.toFixed(2)}</div><div class="smax">orientativo</div></div>`;
+  summaryEl.innerHTML = sumHTML;
+
+  SECS.forEach((_,si)=>{
+    const badge = document.getElementById(`badge-${si}`);
+    if(badge) badge.textContent = secTotals[si].toFixed(2)+' pts';
+    
+    SUBS[si].forEach((_,subi)=>{
+      const subFields = FIELDS.filter(f=>f.sec===si&&f.sub===subi);
+      const subTotal = subFields.reduce((a,f)=>{
+        if(f.type==='publics') return a+calcField(f.id, vals[f.id]);
+        if(f.type==='congresos') return a+calcField(f.id, vals[f.id]);
+        if(f.type==='predoc') return a+calcField(f.id, vals[f.id]);
+        if(f.type==='postdoc') return a+calcField(f.id, vals[f.id]);
+        return a+calcField(f.id, vals[f.id]||0);
+      },0);
+      const subMax = subFields.reduce((a,f)=>{
+        if(f.type==='publics') return a+getMax('3.2_publics_total');
+        if(f.type==='congresos') return a+getMax('3.3_congresos_total');
+        if(f.type==='predoc') return a+getMax('1.2_predoc_meses');
+        if(f.type==='postdoc') return a+getMax('1.2_postdoc_meses');
+        return a+getMax(f.id);
+      },0);
+      const subEl = document.getElementById(`subscore-${si}-${subi}`);
+      if(subEl) subEl.innerHTML = `Subtotal: <span>${subTotal.toFixed(2)}</span> / ${subMax.toFixed(2)}`;
+    });
+    
+    FIELDS.filter(f=>f.sec===si).forEach(f=>{
+      const maxEl = document.getElementById(`maxlabel-${f.id}`);
+      if(maxEl){
+        let mx = getMax(f.id);
+        if(f.type==='publics') mx = getMax('3.2_publics_total');
+        if(f.type==='congresos') mx = getMax('3.3_congresos_total');
+        if(f.type==='predoc') mx = getMax('1.2_predoc_meses');
+        if(f.type==='postdoc') mx = getMax('1.2_postdoc_meses');
+        maxEl.textContent = `máx ${mx.toFixed(2)}`;
+      }
+    });
+  });
+}
+
+function buildSections(){
+  let html = '';
+  SECS.forEach((sec,si)=>{
+    html += `<div class="section">
+      <div class="sec-header" onclick="toggleSec(${si})">
+        <span class="sec-title">${sec.title}</span>
+        <span class="sec-score">
+          <span class="sec-badge" id="badge-${si}">0.00 pts</span>
+          <span class="sec-chevron" id="chev-${si}">▼</span>
+        </span>
+      </div>
+      <div class="sec-body" id="secbody-${si}">`;
+    
+    SUBS[si].forEach((subname,subi)=>{
+      const subFields = FIELDS.filter(f=>f.sec===si&&f.sub===subi);
+      if(!subFields.length) return;
+      html += `<div class="subsec">
+        <div class="subsec-title">${subname}</div>`;
+      subFields.forEach(f=>{
+        if(f.type==='simple'){
+          html += `<div class="field">
+            <div>
+              <div>${f.label}</div>
+              <div class="hint">${f.hint}</div>
+            </div>
+            <div style="text-align:right">
+              <input type="number" id="inp-${f.id}" min="0" step="0.1" value="0" onchange="onchange_field('${f.id}',this.value)" oninput="onchange_field('${f.id}',this.value)">
+              <span id="maxlabel-${f.id}" style="font-size:11px;color:var(--color-text-tertiary);display:block;margin-top:2px">máx ${getMax(f.id).toFixed(2)}</span>
+            </div>
+          </div>`;
+        } else if(f.type==='predoc'){
+          html += `<div class="field">
+            <div>
+              <div>${f.label}</div>
+              <div class="hint">${f.hint}</div>
+            </div>
+            <div style="text-align:right;width:100%">
+              <div class="field-group-title">Predoctorales (meses)</div>
+              <div class="compound-field">
+                <label>Meses totales:</label>
+                <input type="number" id="inp-${f.id}-meses" min="0" step="1" value="0" onchange="onchange_predoc(this.value)" oninput="onchange_predoc(this.value)">
+                <label>Ámbito:</label>
+                <select id="inp-${f.id}-tipo" onchange="recalc()" style="width:100%">
+                  <option value="nacional" selected>Nacional</option>
+                  <option value="regional">Regional</option>
+                  <option value="local">Local</option>
+                </select>
+              </div>
+              <span id="maxlabel-${f.id}" style="font-size:11px;color:var(--color-text-tertiary);display:block;margin-top:4px">máx ${getMax('1.2_predoc_meses').toFixed(2)}</span>
+            </div>
+          </div>`;
+        } else if(f.type==='postdoc'){
+          html += `<div class="field">
+            <div>
+              <div>${f.label}</div>
+              <div class="hint">${f.hint}</div>
+            </div>
+            <div style="text-align:right;width:100%">
+              <div class="field-group-title">Postdoctorales (meses)</div>
+              <div class="compound-field">
+                <label>Meses totales:</label>
+                <input type="number" id="inp-${f.id}-meses" min="0" step="1" value="0" onchange="onchange_postdoc(this.value)" oninput="onchange_postdoc(this.value)">
+                <label>Tipo de contrato:</label>
+                <select id="inp-${f.id}-tipo" onchange="recalc()" style="width:100%">
+                  <option value="galindo">Beatriz Galindo/Ramón y Cajal</option>
+                  <option value="cierva" selected>Juan de la Cierva/Marie Curie</option>
+                  <option value="otros">Otros postdoctorales</option>
+                </select>
+              </div>
+              <span id="maxlabel-${f.id}" style="font-size:11px;color:var(--color-text-tertiary);display:block;margin-top:4px">máx ${getMax('1.2_postdoc_meses').toFixed(2)}</span>
+            </div>
+          </div>`;
+        } else if(f.type==='publics'){
+          html += `<div class="field">
+            <div>
+              <div>${f.label}</div>
+              <div class="hint">${f.hint}</div>
+            </div>
+            <div style="text-align:right;width:100%">
+              <div class="field-group-title">Publicaciones por categoría</div>
+              <div class="compound-field">
+                <label>Categoría A:</label>
+                <input type="number" id="inp-${f.id}-catA" min="0" step="1" value="0" onchange="onchange_publics()" oninput="onchange_publics()">
+                <label>Categoría B:</label>
+                <input type="number" id="inp-${f.id}-catB" min="0" step="1" value="0" onchange="onchange_publics()" oninput="onchange_publics()">
+                <label>Categoría C:</label>
+                <input type="number" id="inp-${f.id}-catC" min="0" step="1" value="0" onchange="onchange_publics()" oninput="onchange_publics()">
+                <label>Categoría D:</label>
+                <input type="number" id="inp-${f.id}-catD" min="0" step="1" value="0" onchange="onchange_publics()" oninput="onchange_publics()">
+              </div>
+              <span id="maxlabel-${f.id}" style="font-size:11px;color:var(--color-text-tertiary);display:block;margin-top:4px">máx ${getMax('3.2_publics_total').toFixed(2)}</span>
+            </div>
+          </div>`;
+        } else if(f.type==='congresos'){
+          html += `<div class="field">
+            <div>
+              <div>${f.label}</div>
+              <div class="hint">${f.hint}</div>
+            </div>
+            <div style="text-align:right;width:100%">
+              <div class="field-group-title">Congresos internacionales</div>
+              <div class="compound-field">
+                <label>Invitaciones:</label>
+                <input type="number" id="inp-${f.id}-intlInv" min="0" step="1" value="0" onchange="onchange_congresos()" oninput="onchange_congresos()">
+                <label>Presentaciones orales:</label>
+                <input type="number" id="inp-${f.id}-intlOral" min="0" step="1" value="0" onchange="onchange_congresos()" oninput="onchange_congresos()">
+                <label>Pósters:</label>
+                <input type="number" id="inp-${f.id}-intlPost" min="0" step="1" value="0" onchange="onchange_congresos()" oninput="onchange_congresos()">
+              </div>
+              <div class="field-group-title" style="margin-top:8px">Congresos nacionales</div>
+              <div class="compound-field">
+                <label>Invitaciones:</label>
+                <input type="number" id="inp-${f.id}-natInv" min="0" step="1" value="0" onchange="onchange_congresos()" oninput="onchange_congresos()">
+                <label>Presentaciones orales:</label>
+                <input type="number" id="inp-${f.id}-natOral" min="0" step="1" value="0" onchange="onchange_congresos()" oninput="onchange_congresos()">
+                <label>Pósters:</label>
+                <input type="number" id="inp-${f.id}-natPost" min="0" step="1" value="0" onchange="onchange_congresos()" oninput="onchange_congresos()">
+              </div>
+              <span id="maxlabel-${f.id}" style="font-size:11px;color:var(--color-text-tertiary);display:block;margin-top:4px">máx ${getMax('3.3_congresos_total').toFixed(2)}</span>
+            </div>
+          </div>`;
+        }
+      });
+      html += `<div class="subscore" id="subscore-${si}-${subi}">Subtotal: <span>0.00</span> / ${subFields.reduce((a,f)=>{
+        if(f.type==='publics') return a+getMax('3.2_publics_total');
+        if(f.type==='congresos') return a+getMax('3.3_congresos_total');
+        if(f.type==='predoc') return a+getMax('1.2_predoc_meses');
+        if(f.type==='postdoc') return a+getMax('1.2_postdoc_meses');
+        return a+getMax(f.id);
+      },0).toFixed(2)}</div></div>`;
+    });
+    html += `</div></div>`;
+  });
+  document.getElementById('sections').innerHTML = html;
+}
+
+function onchange_field(id, v){
+  vals[id] = parseFloat(v)||0;
+  recalc();
+}
+
+function onchange_predoc(v){
+  if(!vals['1.2_predoc']) vals['1.2_predoc'] = {meses:0, tipo:'nacional'};
+  vals['1.2_predoc'].meses = parseFloat(v)||0;
+  recalc();
+}
+
+function onchange_postdoc(v){
+  if(!vals['1.2_postdoc']) vals['1.2_postdoc'] = {meses:0, tipo:'otros'};
+  vals['1.2_postdoc'].meses = parseFloat(v)||0;
+  recalc();
+}
+
+function onchange_publics(){
+  if(!vals['3.2_publics']) vals['3.2_publics'] = {catA:0, catB:0, catC:0, catD:0};
+  vals['3.2_publics'].catA = parseInt(document.getElementById('inp-3.2_publics-catA').value)||0;
+  vals['3.2_publics'].catB = parseInt(document.getElementById('inp-3.2_publics-catB').value)||0;
+  vals['3.2_publics'].catC = parseInt(document.getElementById('inp-3.2_publics-catC').value)||0;
+  vals['3.2_publics'].catD = parseInt(document.getElementById('inp-3.2_publics-catD').value)||0;
+  recalc();
+}
+
+function onchange_congresos(){
+  if(!vals['3.3_congresos']) vals['3.3_congresos'] = {intlInv:0, intlOral:0, intlPost:0, natInv:0, natOral:0, natPost:0};
+  vals['3.3_congresos'].intlInv = parseInt(document.getElementById('inp-3.3_congresos-intlInv').value)||0;
+  vals['3.3_congresos'].intlOral = parseInt(document.getElementById('inp-3.3_congresos-intlOral').value)||0;
+  vals['3.3_congresos'].intlPost = parseInt(document.getElementById('inp-3.3_congresos-intlPost').value)||0;
+  vals['3.3_congresos'].natInv = parseInt(document.getElementById('inp-3.3_congresos-natInv').value)||0;
+  vals['3.3_congresos'].natOral = parseInt(document.getElementById('inp-3.3_congresos-natOral').value)||0;
+  vals['3.3_congresos'].natPost = parseInt(document.getElementById('inp-3.3_congresos-natPost').value)||0;
+  recalc();
+}
+
+function toggleSec(si){
+  const body = document.getElementById(`secbody-${si}`);
+  const chev = document.getElementById(`chev-${si}`);
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+}
+
+function resetAll(){
+  FIELDS.forEach(f=>{
+    if(f.type==='publics') vals[f.id]={catA:0,catB:0,catC:0,catD:0};
+    else if(f.type==='congresos') vals[f.id]={intlInv:0,intlOral:0,intlPost:0,natInv:0,natOral:0,natPost:0};
+    else if(f.type==='predoc') vals[f.id]={meses:0,tipo:'nacional'};
+    else if(f.type==='postdoc') vals[f.id]={meses:0,tipo:'otros'};
+    else vals[f.id]=0;
+    const el=document.getElementById(`inp-${f.id}`); 
+    if(el) el.value=0;
+  });
+  document.querySelectorAll('input[type=number]').forEach(el=>el.value=0);
+  document.querySelectorAll('select').forEach(el=>{
+    if(el.id.includes('tipo')) el.selectedIndex=0;
+  });
+  recalc();
+}
+
+buildSections();
+recalc();
+</script>
+</body>
+</html>
